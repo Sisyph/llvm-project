@@ -1951,7 +1951,7 @@ multiclass FLAT_Real_SADDR_RTN_gfx10<bits<7> op> {
 multiclass FLAT_Real_ST_gfx10<bits<7> op> {
   def _ST_gfx10 :
     FLAT_Real_gfx10<op, !cast<FLAT_Pseudo>(NAME#"_ST")> {
-      let Inst{54-48} = !cast<int>(EXEC_HI.HWEncoding);
+      let Inst{54-48} = !cast<int>(EXEC_HI.HWEncoding){7-1};
       let OtherPredicates = [HasFlatScratchSTMode];
     }
 }
@@ -2166,7 +2166,7 @@ class FLAT_Real_gfx11 <bits<7> op, FLAT_Pseudo ps, string opName = ps.Mnemonic> 
 
 multiclass FLAT_Real_Base_gfx11<bits<7> op, string ps, string opName, int renamed = false> {
   def _gfx11 : FLAT_Real_gfx11<op, !cast<FLAT_Pseudo>(ps), opName> {
-    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding);
+    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding){7-1};
   }
   if renamed then
     def _renamed_gfx11 : MnemonicAlias<!cast<FLAT_Pseudo>(ps).Mnemonic, opName>, Requires<[isGFX11Plus]>;
@@ -2174,7 +2174,7 @@ multiclass FLAT_Real_Base_gfx11<bits<7> op, string ps, string opName, int rename
 
 multiclass FLAT_Real_RTN_gfx11<bits<7> op, string ps, string opName> {
   def _RTN_gfx11 : FLAT_Real_gfx11<op, !cast<FLAT_Pseudo>(ps#"_RTN"), opName> {
-    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding);
+    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding){7-1};
   }
 }
 
@@ -2188,7 +2188,7 @@ multiclass FLAT_Real_SADDR_RTN_gfx11<bits<7> op, string ps, string opName> {
 
 multiclass FLAT_Real_ST_gfx11<bits<7> op, string ps, string opName> {
   def _ST_gfx11 : FLAT_Real_gfx11<op, !cast<FLAT_Pseudo>(ps#"_ST"), opName> {
-    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding);
+    let Inst{54-48} = !cast<int>(SGPR_NULL_gfx11plus.HWEncoding){7-1};
     let OtherPredicates = [HasFlatScratchSTMode];
   }
 }

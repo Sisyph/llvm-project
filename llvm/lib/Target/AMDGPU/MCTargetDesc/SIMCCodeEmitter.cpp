@@ -53,6 +53,14 @@ public:
                          SmallVectorImpl<MCFixup> &Fixups,
                          const MCSubtargetInfo &STI) const override;
 
+  void getMachineOpValueT16(const MCInst &MI, unsigned OpNo, APInt &Op,
+                            SmallVectorImpl<MCFixup> &Fixups,
+                            const MCSubtargetInfo &STI) const override;
+
+  void getMachineOpValueT16Lo128(const MCInst &MI, unsigned OpNo, APInt &Op,
+                                 SmallVectorImpl<MCFixup> &Fixups,
+                                 const MCSubtargetInfo &STI) const override;
+
   /// Use a fixup to encode the simm16 field for SOPP branch
   ///        instructions.
   void getSOPPBrEncoding(const MCInst &MI, unsigned OpNo, APInt &Op,
@@ -338,7 +346,7 @@ void SIMCCodeEmitter::encodeInstruction(const MCInst &MI, raw_ostream &OS,
   // However, dst is encoded as EXEC for compatibility with SP3.
   if (AMDGPU::isGFX10Plus(STI) && isVCMPX64(Desc)) {
     assert((Encoding & 0xFF) == 0);
-    Encoding |= MRI.getEncodingValue(AMDGPU::EXEC_LO);
+    Encoding |= MRI.getEncodingValue(AMDGPU::EXEC_LO) >> 1;
   }
 
   for (unsigned i = 0; i < bytes; i++) {
@@ -443,7 +451,7 @@ void SIMCCodeEmitter::getSDWASrcEncoding(const MCInst &MI, unsigned OpNo,
 
   if (MO.isReg()) {
     unsigned Reg = MO.getReg();
-    RegEnc |= MRI.getEncodingValue(Reg);
+    RegEnc |= MRI.getEncodingValue(Reg) >> 1;
     RegEnc &= SDWA9EncValues::SRC_VGPR_MASK;
     if (AMDGPU::isSGPR(AMDGPU::mc2PseudoReg(Reg), &MRI)) {
       RegEnc |= SDWA9EncValues::SRC_SGPR_MASK;
@@ -474,7 +482,7 @@ void SIMCCodeEmitter::getSDWAVopcDstEncoding(const MCInst &MI, unsigned OpNo,
 
   unsigned Reg = MO.getReg();
   if (Reg != AMDGPU::VCC && Reg != AMDGPU::VCC_LO) {
-    RegEnc |= MRI.getEncodingValue(Reg);
+    RegEnc |= MRI.getEncodingValue(Reg) >> 1;
     RegEnc &= SDWA9EncValues::VOPC_DST_SGPR_MASK;
     RegEnc |= SDWA9EncValues::VOPC_DST_VCC_MASK;
   }
@@ -486,7 +494,7 @@ void SIMCCodeEmitter::getAVOperandEncoding(const MCInst &MI, unsigned OpNo,
                                            SmallVectorImpl<MCFixup> &Fixups,
                                            const MCSubtargetInfo &STI) const {
   unsigned Reg = MI.getOperand(OpNo).getReg();
-  uint64_t Enc = MRI.getEncodingValue(Reg);
+  uint64_t Enc = MRI.getEncodingValue(Reg) >> 1;
 
   // VGPR and AGPR have the same encoding, but SrcA and SrcB operands of mfma
   // instructions use acc[0:1] modifier bits to distinguish. These bits are
@@ -529,12 +537,46 @@ static bool needsPCRel(const MCExpr *Expr) {
   llvm_unreachable("invalid kind");
 }
 
+/// \returns the encoding for a 16 bit operand in a VOP3 True 16 bit instruction
+void SIMCCodeEmitter::getMachineOpValueT16(const MCInst &MI, unsigned OpNo,
+                                           APInt &Op,
+                                           SmallVectorImpl<MCFixup> &Fixups,
+                                           const MCSubtargetInfo &STI) const {
+  const MCOperand &MO = MI.getOperand(OpNo);
+  if (MO.isReg()) {
+    auto Encoding = MRI.getEncodingValue(MO.getReg());
+    if ((Encoding & (1 << 9))) {                    // isVGPR
+      Encoding = ((Encoding & 1) << 10) | Encoding; // Move the suffix bit.
+    }
+    Op = Encoding >> 1;
+    return;
+  }
+  getMachineOpValueCommon(MI, MO, OpNo, Op, Fixups, STI);
+}
+
+/// \returns the encoding for a 16 bit operand in a True 16 bit instruction
+void SIMCCodeEmitter::getMachineOpValueT16Lo128(
+    const MCInst &MI, unsigned OpNo, APInt &Op,
+    SmallVectorImpl<MCFixup> &Fixups, const MCSubtargetInfo &STI) const {
+  const MCOperand &MO = MI.getOperand(OpNo);
+  if (MO.isReg()) {
+    auto Encoding = MRI.getEncodingValue(MO.getReg());
+    if ((Encoding & (1 << 9))) { // isVGPR
+      assert((Encoding & (1 << 8)) == 0 && "Did not expect VGPR RegNo > 127");
+      Encoding = ((Encoding & 1) << 8) | Encoding;
+    }
+    Op = Encoding >> 1;
+    return;
+  }
+  getMachineOpValueCommon(MI, MO, OpNo, Op, Fixups, STI);
+}
+
 void SIMCCodeEmitter::getMachineOpValue(const MCInst &MI,
                                         const MCOperand &MO, APInt &Op,
                                         SmallVectorImpl<MCFixup> &Fixups,
                                         const MCSubtargetInfo &STI) const {
   if (MO.isReg()){
-    Op = MRI.getEncodingValue(MO.getReg());
+    Op = MRI.getEncodingValue(MO.getReg()) >> 1;
     return;
   }
   unsigned OpNo = &MO - MI.begin();

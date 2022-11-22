@@ -2486,7 +2486,7 @@ SIRegisterInfo::getVGPRClassForBitWidth(unsigned BitWidth) const {
   if (BitWidth == 1)
     return &AMDGPU::VReg_1RegClass;
   if (BitWidth <= 16)
-    return &AMDGPU::VGPR_LO16RegClass;
+    return &AMDGPU::VGPR_16RegClass;
   if (BitWidth <= 32)
     return &AMDGPU::VGPR_32RegClass;
   return ST.needsAlignedVGPRs() ? getAlignedVGPRClassForBitWidth(BitWidth)
@@ -2602,7 +2602,7 @@ getAlignedVectorSuperClassForBitWidth(unsigned BitWidth) {
 const TargetRegisterClass *
 SIRegisterInfo::getVectorSuperClassForBitWidth(unsigned BitWidth) const {
   if (BitWidth <= 16)
-    return &AMDGPU::VGPR_LO16RegClass;
+    return &AMDGPU::VGPR_16RegClass;
   if (BitWidth <= 32)
     return &AMDGPU::AV_32RegClass;
   return ST.needsAlignedVGPRs()
@@ -2643,6 +2643,8 @@ SIRegisterInfo::getSGPRClassForBitWidth(unsigned BitWidth) {
 const TargetRegisterClass *
 SIRegisterInfo::getPhysRegClass(MCRegister Reg) const {
   static const TargetRegisterClass *const BaseClasses[] = {
+    &AMDGPU::VGPR_16_Lo128RegClass,
+    &AMDGPU::VGPR_16RegClass,
     &AMDGPU::VGPR_LO16RegClass,
     &AMDGPU::VGPR_HI16RegClass,
     &AMDGPU::SReg_LO16RegClass,
@@ -2888,6 +2890,7 @@ unsigned SIRegisterInfo::getRegPressureLimit(const TargetRegisterClass *RC,
   default:
     return AMDGPUGenRegisterInfo::getRegPressureLimit(RC, MF);
   case AMDGPU::VGPR_32RegClassID:
+  case AMDGPU::VGPR_16RegClassID:
   case AMDGPU::VGPR_LO16RegClassID:
   case AMDGPU::VGPR_HI16RegClassID:
     return std::min(ST.getMaxNumVGPRs(Occupancy), ST.getMaxNumVGPRs(MF));

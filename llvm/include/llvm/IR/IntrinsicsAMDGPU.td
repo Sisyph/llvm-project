@@ -345,7 +345,7 @@ def int_amdgcn_rsq_clamp : Intrinsic<
 
 // For int_amdgcn_ldexp_f16, only the low 16 bits of the i32 src1 operand will used.
 def int_amdgcn_ldexp : Intrinsic<
-  [llvm_anyfloat_ty], [LLVMMatchType<0>, llvm_i32_ty],
+  [llvm_anyfloat_ty], [LLVMMatchType<0>, llvm_anyint_ty],
   [IntrNoMem, IntrSpeculatable, IntrWillReturn]
 >;
 
