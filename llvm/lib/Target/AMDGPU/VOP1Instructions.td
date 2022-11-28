@@ -20,7 +20,7 @@ class VOP1e <bits<8> op, VOPProfile P> : Enc32 {
   let Inst{31-25} = 0x3f; //encoding
 }
 
-class VOP1_SDWAe <bits<8> op, VOPProfile P> : VOP_SDWAe <P> {
+class VOP1_SDWAe<bits<8> op, VOPProfile P> : VOP_SDWAe<P> {
   bits<8> vdst;
 
   let Inst{8-0}   = 0xf9; // sdwa
@@ -29,7 +29,7 @@ class VOP1_SDWAe <bits<8> op, VOPProfile P> : VOP_SDWAe <P> {
   let Inst{31-25} = 0x3f; // encoding
 }
 
-class VOP1_SDWA9Ae <bits<8> op, VOPProfile P> : VOP_SDWA9Ae <P> {
+class VOP1_SDWA9Ae<bits<8> op, VOPProfile P> : VOP_SDWA9Ae<P> {
   bits<8> vdst;
 
   let Inst{8-0}   = 0xf9; // sdwa
@@ -38,8 +38,10 @@ class VOP1_SDWA9Ae <bits<8> op, VOPProfile P> : VOP_SDWA9Ae <P> {
   let Inst{31-25} = 0x3f; // encoding
 }
 
-class VOP1_Pseudo <string opName, VOPProfile P, list<dag> pattern=[], bit VOP1Only = 0> :
-  VOP_Pseudo <opName, !if(VOP1Only, "", "_e32"), P, P.Outs32, P.Ins32, "", pattern> {
+class VOP1_Pseudo<string opName, VOPProfile P, list<dag> pattern = [],
+                  bit VOP1Only = 0>
+    : VOP_Pseudo<opName, !if (VOP1Only, "", "_e32"), P, P.Outs32, P.Ins32, "",
+                 pattern> {
 
   let AsmOperands = P.Asm32;
 
@@ -540,6 +542,16 @@ def VOP_SWAP_I32 : VOPProfile<[i32, i32, i32, untyped]> {
   let Ins64 = (ins);
 }
 
+// TODO-GFX11 new inst profile, pending 16 register support probably
+/*def VOP_SWAP_I16 : VOPProfile<[i16, i16, i16, untyped]> {*/
+  /*let Outs32 = (outs VGPR_16:$vdst, VGPR_16:$vdst1);*/
+  /*let Ins32 = (ins VGPR_16:$src0, VGPR_16:$src1);*/
+  /*let Asm32 = " $vdst, $src0";*/
+  /*let Outs64 = Outs32;*/
+  /*let Asm64 = "";*/
+  /*let Ins64 = (ins);*/
+/*}*/
+
 let SubtargetPredicate = isGFX9Plus in {
   def V_SWAP_B32 : VOP1_Pseudo<"v_swap_b32", VOP_SWAP_I32, [], 1> {
     let Constraints = "$vdst = $src1, $vdst1 = $src0";
@@ -647,14 +659,22 @@ def V_ACCVGPR_MOV_B32 : VOP1_Pseudo<"v_accvgpr_mov_b32", VOPProfileAccMov, [], 1
 }
 
 let SubtargetPredicate = isGFX11Plus in {
+  // TODO-GFX11 new inst
+  /*def V_SWAP_B16 : VOP1_Pseudo<"v_swap_b16", VOP_SWAP_I16, [], 1> {*/
+    /*let Constraints = "$vdst = $src1, $vdst1 = $src0";*/
+    /*let DisableEncoding = "$vdst1,$src1";*/
+    /*let SchedRW = [Write64Bit, Write64Bit];*/
+  /*}*/
+  // TODO-GFX11 select new insts
+  defm V_MOV_B16_t16        : VOP1Inst<"v_mov_b16_t16", VOPProfile_True16<VOP_I16_I16>>;
   // Restrict src0 to be VGPR
   def V_PERMLANE64_B32 : VOP1_Pseudo<"v_permlane64_b32", VOP_MOVRELS,
                                       getVOP1Pat64<int_amdgcn_permlane64,
                                                    VOP_MOVRELS>.ret,
                                       /*VOP1Only=*/ 1>;
-  defm V_NOT_B16        : VOP1Inst_t16<"v_not_b16", VOP_I16_I16>;
-  defm V_CVT_I32_I16    : VOP1Inst_t16<"v_cvt_i32_i16", VOP_I32_I16>;
-  defm V_CVT_U32_U16    : VOP1Inst_t16<"v_cvt_u32_u16", VOP_I32_I16>;
+  defm V_NOT_B16_t16        : VOP1Inst<"v_not_b16_t16", VOPProfile_True16<VOP_I16_I16>>;
+  defm V_CVT_I32_I16_t16    : VOP1Inst<"v_cvt_i32_i16_t16", VOPProfile_True16<VOP_I32_I16>>;
+  defm V_CVT_U32_U16_t16    : VOP1Inst<"v_cvt_u32_u16_t16", VOPProfile_True16<VOP_I32_I16>>;
 } // End SubtargetPredicate = isGFX11Plus
 
 //===----------------------------------------------------------------------===//
@@ -714,6 +734,10 @@ let AssemblerPredicate = isGFX11Only, DecoderNamespace = "GFX11" in {
       VOP1_Real<ps, SIEncodingFamily.GFX11>,
       VOP1e<op{7-0}, ps.Pfl>;
   }
+  // Since there are only 127 legal VGPRs for VOP1 True16, we don't need the
+  // highest bit of the register, and so with the shifts in
+  // SIMCCodeEmitter::getMachineOpValueT16Lo128 we don't need a separate
+  // encoding for e32 True16.
   multiclass VOP1_Real_e32_with_name_gfx11<bits<9> op, string opName,
                                        string asmName> {
     defvar ps = !cast<VOP1_Pseudo>(opName#"_e32");
@@ -757,6 +781,11 @@ let AssemblerPredicate = isGFX11Only, DecoderNamespace = "GFX11" in {
 multiclass VOP1_Realtriple_e64_gfx11<bits<9> op> {
   defm NAME : VOP3_Realtriple_gfx11<{0, 1, 1, op{6-0}}, /*isSingle=*/ 0, NAME>;
 }
+multiclass VOP1_Realtriple_t16_e64_gfx11<bits<9> op, string asmName, string opName> {
+  defm NAME
+      : VOP3_Realtriple_t16_gfx11<{0, 1, 1, op{6 - 0}},
+                                  asmName, opName>;
+}
 multiclass VOP1_Realtriple_e64_with_name_gfx11<bits<9> op, string opName,
   string asmName> {
   defm NAME : VOP3_Realtriple_with_name_gfx11<{0, 1, 1, op{6-0}}, opName,
@@ -777,14 +806,19 @@ multiclass VOP1_Real_NO_VOP3_with_name_gfx11<bits<9> op, string opName,
                     Requires<[isGFX11Plus]>;
 }
 
+multiclass VOP1_Real_t16_NO_VOP3_gfx11<bits<9> op, string asmName>
+    : VOP1_Real_e32_with_name_gfx11<op, NAME, asmName>,
+      VOP1_Real_dpp_with_name_gfx11<op, NAME, asmName>,
+      VOP1_Real_dpp8_with_name_gfx11<op, NAME, asmName>;
+
 multiclass VOP1_Real_FULL_with_name_gfx11<bits<9> op, string opName,
                                          string asmName> :
   VOP1_Real_NO_VOP3_with_name_gfx11<op, opName, asmName>,
   VOP1_Realtriple_e64_with_name_gfx11<op, opName, asmName>;
 
-multiclass VOP1_Real_FULL_t16_gfx11<bits<9> op, string asmName,
-                                    string opName = NAME> :
-  VOP1_Real_FULL_with_name_gfx11<op, opName, asmName>;
+multiclass VOP1_Real_FULL_t16_gfx11<bits<9> op, string asmName>
+    : VOP1_Real_t16_NO_VOP3_gfx11<op, asmName>,
+      VOP1_Realtriple_t16_e64_gfx11<op, asmName, NAME>;
 
 multiclass VOP1_Real_NO_DPP_gfx11<bits<9> op> :
   VOP1_Real_e32_gfx11<op>, VOP1_Real_e64_gfx11<op>;
@@ -793,13 +827,16 @@ defm V_CVT_NEAREST_I32_F32 : VOP1_Real_FULL_with_name_gfx11<0x00c,
   "V_CVT_RPI_I32_F32", "v_cvt_nearest_i32_f32">;
 defm V_CVT_FLOOR_I32_F32   : VOP1_Real_FULL_with_name_gfx11<0x00d,
   "V_CVT_FLR_I32_F32", "v_cvt_floor_i32_f32">;
+defm V_MOV_B16_t16         : VOP1_Real_FULL_t16_gfx11<0x01c, "v_mov_b16">;
 defm V_CLZ_I32_U32         : VOP1_Real_FULL_with_name_gfx11<0x039,
   "V_FFBH_U32", "v_clz_i32_u32">;
 defm V_CTZ_I32_B32         : VOP1_Real_FULL_with_name_gfx11<0x03a,
   "V_FFBL_B32", "v_ctz_i32_b32">;
 defm V_CLS_I32             : VOP1_Real_FULL_with_name_gfx11<0x03b,
   "V_FFBH_I32", "v_cls_i32">;
-defm V_PERMLANE64_B32      : VOP1Only_Real_gfx11<0x067>;
+// TODO-GFX11 new inst
+/*defm V_SWAP_B16            : VOP1Only_Real_gfx11<0x066>;*/
+defm V_PERMLANE64_B32        : VOP1Only_Real_gfx11<0x067>;
 defm V_NOT_B16_t16           : VOP1_Real_FULL_t16_gfx11<0x069, "v_not_b16">;
 defm V_CVT_I32_I16_t16       : VOP1_Real_FULL_t16_gfx11<0x06a, "v_cvt_i32_i16">;
 defm V_CVT_U32_U16_t16       : VOP1_Real_FULL_t16_gfx11<0x06b, "v_cvt_u32_u16">;
@@ -1210,7 +1247,8 @@ def : GCNPat <
 
 } // End OtherPredicates = [isGFX8Plus]
 
-let OtherPredicates = [isGFX8Plus] in {
+let OtherPredicates = [isGFX8Plus, NotHasTrue16BitInsts] in {
+
 def : GCNPat<
   (i32 (anyext i16:$src)),
   (COPY $src)
@@ -1233,7 +1271,31 @@ def : GCNPat <
   (EXTRACT_SUBREG $src, sub0)
 >;
 
-} // End OtherPredicates = [isGFX8Plus]
+} // End OtherPredicates = [isGFX8Plus, NotHasTrue16BitInsts]
+
+let OtherPredicates = [HasTrue16BitInsts] in {
+
+def : GCNPat<
+  (i32 (anyext i16:$src)),
+  (REG_SEQUENCE VGPR_32, $src, lo16, (i16 (IMPLICIT_DEF)), hi16)
+>;
+
+def : GCNPat<
+  (i64 (anyext i16:$src)),
+  (REG_SEQUENCE VReg_64, $src, lo16, (i16 (IMPLICIT_DEF)), hi16, (i32 (IMPLICIT_DEF)), sub1)
+>;
+
+def : GCNPat<
+  (i16 (trunc i32:$src)),
+  (EXTRACT_SUBREG $src, lo16)
+>;
+
+def : GCNPat <
+  (i16 (trunc i64:$src)),
+  (EXTRACT_SUBREG $src, lo16)
+>;
+
+} // End OtherPredicates = [HasTrue16BitInsts]
 
 //===----------------------------------------------------------------------===//
 // GFX9

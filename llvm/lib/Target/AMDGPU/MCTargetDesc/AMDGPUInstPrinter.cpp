@@ -340,7 +340,8 @@ void AMDGPUInstPrinter::printSymbolicFormat(const MCInst *MI,
 }
 
 void AMDGPUInstPrinter::printRegOperand(unsigned RegNo, raw_ostream &O,
-                                        const MCRegisterInfo &MRI) {
+                                        const MCRegisterInfo &MRI,
+                                        const MCSubtargetInfo &STI) {
 #if !defined(NDEBUG)
   switch (RegNo) {
   case AMDGPU::FP_REG:
@@ -355,7 +356,8 @@ void AMDGPUInstPrinter::printRegOperand(unsigned RegNo, raw_ostream &O,
 #endif
 
   StringRef RegName(getRegisterName(RegNo));
-  if (!Keep16BitSuffixes)
+  if (!STI.getFeatureBits()[AMDGPU::FeatureTrue16BitInsts] &&
+      !Keep16BitSuffixes)
     if (!RegName.consume_back(".l"))
       RegName.consume_back(".h");
 
@@ -600,7 +602,7 @@ void AMDGPUInstPrinter::printDefaultVccOperand(bool FirstOperand,
   printRegOperand(STI.getFeatureBits()[AMDGPU::FeatureWavefrontSize64]
                       ? AMDGPU::VCC
                       : AMDGPU::VCC_LO,
-                  O, MRI);
+                  O, MRI, STI);
   if (FirstOperand)
     O << ", ";
 }
@@ -666,7 +668,7 @@ void AMDGPUInstPrinter::printRegularOperand(const MCInst *MI, unsigned OpNo,
 
   const MCOperand &Op = MI->getOperand(OpNo);
   if (Op.isReg()) {
-    printRegOperand(Op.getReg(), O, MRI);
+    printRegOperand(Op.getReg(), O, MRI, STI);
   } else if (Op.isImm()) {
     const uint8_t OpTy = Desc.OpInfo[OpNo].OperandType;
     switch (OpTy) {
@@ -1099,7 +1101,7 @@ void AMDGPUInstPrinter::printExpSrcN(const MCInst *MI, unsigned OpNo,
     OpNo = OpNo - N + N / 2;
 
   if (En & (1 << N))
-    printRegOperand(MI->getOperand(OpNo).getReg(), O, MRI);
+    printRegOperand(MI->getOperand(OpNo).getReg(), O, MRI, STI);
   else
     O << "off";
 }

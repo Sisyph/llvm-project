@@ -493,8 +493,8 @@ class MUBUF_Load_Pseudo <string opName,
                          list<dag> pattern=[],
                          // Workaround bug bz30254
                          int addrKindCopy = addrKind,
-                         RegisterClass vdata_rc = getVregSrcForVT<vdata_vt>.ret,
-                         RegisterOperand vdata_op = getLdStVDataRegisterOperand<vdata_rc, isTFE>.ret>
+                         RegisterOperand vdata_rc = getVregSrcForVT<vdata_vt>.ret,
+                         RegisterOperand vdata_op = getLdStVDataRegisterOperand<vdata_rc.RegClass, isTFE>.ret>
   : MUBUF_Pseudo<opName,
                  !if(!or(isLds, isLdsOpc), (outs), (outs vdata_op:$vdata)),
                  !con(getMUBUFIns<addrKindCopy, [], isTFE>.ret,
@@ -594,7 +594,7 @@ class MUBUF_Store_Pseudo <string opName,
                           int addrKindCopy = addrKind>
   : MUBUF_Pseudo<opName,
                  (outs),
-                 getMUBUFIns<addrKindCopy, [getVregSrcForVT<store_vt>.ret], isTFE>.ret,
+                 getMUBUFIns<addrKindCopy, [getVregSrcForVT<store_vt>.ret.RegClass], isTFE>.ret,
                  " $vdata, " # getMUBUFAsmOps<addrKindCopy>.ret # "$cpol" #
                    !if(isTFE, " tfe", "") # "$swz",
                  pattern>,
