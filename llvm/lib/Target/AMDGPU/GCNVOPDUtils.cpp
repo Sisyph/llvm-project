@@ -34,6 +34,15 @@ using namespace llvm;
 
 #define DEBUG_TYPE "gcn-vopd-utils"
 
+/// Returns true if MI is a F64 instruction that requires strict
+/// VOPD formation constraints (OpX cannot write to OpY's source registers).
+static bool isMulticycleOp(const MachineInstr &MI, const GCNSubtarget &ST) {
+  if (!ST.hasGFX1250Insts())
+    return false;
+  unsigned Opc = MI.getOpcode();
+  return AMDGPU::isDPMACCInstruction(Opc);
+}
+
 bool llvm::checkVOPDRegConstraints(const SIInstrInfo &TII,
                                    const MachineInstr &MIX,
                                    const MachineInstr &MIY, bool IsVOPD3) {
@@ -62,10 +71,17 @@ bool llvm::checkVOPDRegConstraints(const SIInstrInfo &TII,
   };
   SmallVector<Register> UniqueScalarRegs;
 
-  // MIX must not modify any registers used by MIY.
+  // On GFX11, OpX and OpY must be independent.
+  // On GFX12+, MIX must not modify any registers used by MIY if the resulting
+  // VOPD instruction is multi-cycle. This can happen if certain F64 opcodes are
+  // used as OpX, or any source operands are the same VGPR.
+  bool AllowSameVGPR = ST.hasGFX1250Insts(); // Only VOPD3 allows same VGPR
   for (const auto &Use : MIY.uses())
-    if (Use.isReg() && MIX.modifiesRegister(Use.getReg(), TRI))
-      return false;
+    if (Use.isReg() && MIX.modifiesRegister(Use.getReg(), TRI)) {
+      AllowSameVGPR = false;
+      if (AMDGPU::isNotGFX12Plus(ST) || isMulticycleOp(MIX, ST))
+        return false;
+    }
 
   auto getVRegIdx = [&](unsigned OpcodeIdx, unsigned OperandIdx) {
     const MachineInstr &MI = (OpcodeIdx == VOPD::X) ? MIX : MIY;
@@ -147,7 +163,6 @@ bool llvm::checkVOPDRegConstraints(const SIInstrInfo &TII,
   bool SkipSrc = (ST.hasGFX11_7Insts() || ST.hasGFX12Insts()) &&
                  MIX.getOpcode() == AMDGPU::V_MOV_B32_e32 &&
                  MIY.getOpcode() == AMDGPU::V_MOV_B32_e32;
-  bool AllowSameVGPR = ST.hasGFX1250Insts();
 
   if (InstInfo.hasInvalidOperand(getVRegIdx, *TRI, SkipSrc, AllowSameVGPR,
                                  IsVOPD3))

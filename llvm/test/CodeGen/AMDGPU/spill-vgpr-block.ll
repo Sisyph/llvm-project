@@ -29,10 +29,10 @@ define i32 @non_entry_func(i32 %x) {
 ; CHECK-NEXT:    ; transferring at most v120 ; 128-byte Folded Reload
 ; CHECK-NEXT:    scratch_load_block v[120:151], off, s32
 ; CHECK-NEXT:    s_mov_b32 m0, 0x110003
-; CHECK-NEXT:    scratch_store_b32 off, v1, s32 offset:88
+; CHECK-NEXT:    v_mov_b32_e32 v0, v1
 ; CHECK-NEXT:    ; transferring at most v40 v41 v56 v60 ; 128-byte Folded Reload
 ; CHECK-NEXT:    scratch_load_block v[40:71], off, s32 offset:4
-; CHECK-NEXT:    v_mov_b32_e32 v0, v1
+; CHECK-NEXT:    scratch_store_b32 off, v1, s32 offset:88
 ; CHECK-NEXT:    v_readlane_b32 s49, v2, 1
 ; CHECK-NEXT:    v_readlane_b32 s48, v2, 0
 ; CHECK-NEXT:    s_xor_saveexec_b32 s0, -1

@@ -156,10 +156,8 @@ define amdgpu_ps half @image_sample_2d_f16_tfe(<8 x i32> inreg %rsrc, <4 x i32> 
 ; GFX12-TRUE16:       ; %bb.0: ; %main_body
 ; GFX12-TRUE16-NEXT:    s_mov_b32 s14, exec_lo
 ; GFX12-TRUE16-NEXT:    s_wqm_b32 exec_lo, exec_lo
-; GFX12-TRUE16-NEXT:    v_mov_b32_e32 v2, 0
-; GFX12-TRUE16-NEXT:    v_mov_b32_e32 v3, v2
-; GFX12-TRUE16-NEXT:    v_mov_b32_e32 v4, v3
-; GFX12-TRUE16-NEXT:    v_mov_b32_e32 v3, v2
+; GFX12-TRUE16-NEXT:    v_dual_mov_b32 v2, 0 :: v_dual_mov_b32 v3, v2
+; GFX12-TRUE16-NEXT:    v_dual_mov_b32 v4, v3 :: v_dual_mov_b32 v3, v2
 ; GFX12-TRUE16-NEXT:    s_and_b32 exec_lo, exec_lo, s14
 ; GFX12-TRUE16-NEXT:    image_sample v[3:4], [v0, v1], s[0:7], s[8:11] dmask:0x1 dim:SQ_RSRC_IMG_2D tfe d16
 ; GFX12-TRUE16-NEXT:    s_wait_samplecnt 0x0
@@ -171,9 +169,8 @@ define amdgpu_ps half @image_sample_2d_f16_tfe(<8 x i32> inreg %rsrc, <4 x i32> 
 ; GFX12-FAKE16:       ; %bb.0: ; %main_body
 ; GFX12-FAKE16-NEXT:    s_mov_b32 s14, exec_lo
 ; GFX12-FAKE16-NEXT:    s_wqm_b32 exec_lo, exec_lo
-; GFX12-FAKE16-NEXT:    v_mov_b32_e32 v4, 0
+; GFX12-FAKE16-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX12-FAKE16-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v3, v0
-; GFX12-FAKE16-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX12-FAKE16-NEXT:    v_dual_mov_b32 v0, v4 :: v_dual_mov_b32 v1, v5
 ; GFX12-FAKE16-NEXT:    s_and_b32 exec_lo, exec_lo, s14
 ; GFX12-FAKE16-NEXT:    image_sample v[0:1], [v3, v2], s[0:7], s[8:11] dmask:0x1 dim:SQ_RSRC_IMG_2D tfe d16
@@ -281,8 +278,7 @@ define amdgpu_ps <2 x float> @image_sample_c_d_1d_v2f16_tfe(<8 x i32> inreg %rsr
 ; GFX12-LABEL: image_sample_c_d_1d_v2f16_tfe:
 ; GFX12:       ; %bb.0: ; %main_body
 ; GFX12-NEXT:    v_dual_mov_b32 v4, v1 :: v_dual_mov_b32 v5, v0
-; GFX12-NEXT:    v_mov_b32_e32 v0, 0
-; GFX12-NEXT:    v_mov_b32_e32 v1, v0
+; GFX12-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
 ; GFX12-NEXT:    image_sample_c_d v[0:1], [v5, v4, v2, v3], s[0:7], s[8:11] dmask:0x3 dim:SQ_RSRC_IMG_1D tfe d16
 ; GFX12-NEXT:    s_wait_samplecnt 0x0
 ; GFX12-NEXT:    ; return to shader part epilog

@@ -97,31 +97,31 @@ define amdgpu_kernel void @ds_wmma(ptr addrspace(3) %base, ptr addrspace(1) %out
 ; GCN-NEXT:    s_clause 0x1
 ; GCN-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
 ; GCN-NEXT:    s_load_b32 s2, s[4:5], 0x0 nv
-; GCN-NEXT:    v_mov_b32_e32 v0, 0
+; GCN-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GCN-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v2, v0
-; GCN-NEXT:    v_dual_mov_b32 v3, v0 :: v_dual_mov_b32 v4, v0
-; GCN-NEXT:    v_dual_mov_b32 v5, v0 :: v_dual_mov_b32 v6, v0
-; GCN-NEXT:    v_dual_mov_b32 v7, v0 :: v_dual_mov_b32 v8, v0
-; GCN-NEXT:    v_dual_mov_b32 v9, v0 :: v_dual_mov_b32 v10, v0
-; GCN-NEXT:    v_dual_mov_b32 v11, v0 :: v_dual_mov_b32 v12, v0
-; GCN-NEXT:    v_dual_mov_b32 v13, v0 :: v_dual_mov_b32 v14, v0
+; GCN-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0
+; GCN-NEXT:    v_dual_mov_b32 v4, v0 :: v_dual_mov_b32 v5, v0
+; GCN-NEXT:    v_dual_mov_b32 v6, v0 :: v_dual_mov_b32 v7, v0
+; GCN-NEXT:    v_dual_mov_b32 v8, v0 :: v_dual_mov_b32 v9, v0
+; GCN-NEXT:    v_dual_mov_b32 v10, v0 :: v_dual_mov_b32 v11, v0
+; GCN-NEXT:    v_dual_mov_b32 v12, v0 :: v_dual_mov_b32 v13, v0
+; GCN-NEXT:    v_dual_mov_b32 v14, v0 :: v_dual_mov_b32 v15, v0
 ; GCN-NEXT:    s_wait_kmcnt 0x0
 ; GCN-NEXT:    s_bitcmp1_b32 s0, 0
-; GCN-NEXT:    v_dual_mov_b32 v15, v0 :: v_dual_mov_b32 v16, v0
+; GCN-NEXT:    v_dual_mov_b32 v16, v0 :: v_dual_mov_b32 v17, v0
 ; GCN-NEXT:    s_cselect_b32 s0, -1, 0
-; GCN-NEXT:    v_dual_mov_b32 v17, v0 :: v_dual_mov_b32 v18, v0
+; GCN-NEXT:    v_dual_mov_b32 v18, v0 :: v_dual_mov_b32 v19, v0
 ; GCN-NEXT:    s_xor_b32 s0, s0, -1
-; GCN-NEXT:    v_dual_mov_b32 v19, v0 :: v_dual_mov_b32 v20, v0
+; GCN-NEXT:    v_dual_mov_b32 v20, v0 :: v_dual_mov_b32 v21, v0
 ; GCN-NEXT:    v_cndmask_b32_e64 v24, 0, 1, s0
-; GCN-NEXT:    v_dual_mov_b32 v21, v0 :: v_dual_mov_b32 v22, v0
-; GCN-NEXT:    v_dual_mov_b32 v23, v0 :: v_dual_mov_b32 v25, v0
-; GCN-NEXT:    v_mov_b32_e32 v26, v0
+; GCN-NEXT:    v_dual_mov_b32 v22, v0 :: v_dual_mov_b32 v23, v0
+; GCN-NEXT:    v_dual_mov_b32 v25, v0 :: v_dual_mov_b32 v26, v0
+; GCN-NEXT:    v_mov_b32_e32 v27, v0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_4)
 ; GCN-NEXT:    v_cmp_ne_u32_e64 s0, 1, v24
-; GCN-NEXT:    v_dual_mov_b32 v24, v0 :: v_dual_mov_b32 v27, v0
-; GCN-NEXT:    v_dual_mov_b32 v28, v0 :: v_dual_mov_b32 v29, v0
-; GCN-NEXT:    v_dual_mov_b32 v30, v0 :: v_dual_mov_b32 v31, v0
+; GCN-NEXT:    v_dual_mov_b32 v24, v0 :: v_dual_mov_b32 v28, v0
+; GCN-NEXT:    v_dual_mov_b32 v29, v0 :: v_dual_mov_b32 v30, v0
+; GCN-NEXT:    v_mov_b32_e32 v31, v0
 ; GCN-NEXT:  .LBB0_1: ; %loop
 ; GCN-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GCN-NEXT:    v_nop
@@ -256,19 +256,18 @@ define amdgpu_kernel void @ds_wmma_permute(ptr addrspace(3) %base, ptr addrspace
 ; COEXEC-NEXT:    s_clause 0x1
 ; COEXEC-NEXT:    s_load_b64 s[2:3], s[4:5], 0x0 nv
 ; COEXEC-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
-; COEXEC-NEXT:    v_mov_b32_e32 v0, 0
-; COEXEC-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; COEXEC-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v2, v0
-; COEXEC-NEXT:    v_mov_b32_e32 v3, v0
+; COEXEC-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; COEXEC-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_4) | instid1(SALU_CYCLE_1)
+; COEXEC-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0
 ; COEXEC-NEXT:    s_wait_kmcnt 0x0
 ; COEXEC-NEXT:    s_bitcmp1_b32 s0, 0
 ; COEXEC-NEXT:    v_mov_b32_e32 v4, v0
 ; COEXEC-NEXT:    s_cselect_b32 s0, -1, 0
-; COEXEC-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(SKIP_3) | instid1(VALU_DEP_2)
 ; COEXEC-NEXT:    s_xor_b32 s0, s0, -1
 ; COEXEC-NEXT:    v_mov_b32_e32 v5, v0
 ; COEXEC-NEXT:    v_cndmask_b32_e64 v7, 0, 1, s0
 ; COEXEC-NEXT:    v_mov_b32_e32 v6, v0
+; COEXEC-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; COEXEC-NEXT:    v_cmp_ne_u32_e64 s0, 1, v7
 ; COEXEC-NEXT:    v_dual_mov_b32 v7, v0 :: v_dual_mov_b32 v8, v0
 ; COEXEC-NEXT:    v_dual_mov_b32 v16, v0 :: v_dual_mov_b32 v24, v0
@@ -374,32 +373,32 @@ define amdgpu_kernel void @ds_wmma_permute(ptr addrspace(3) %base, ptr addrspace
 ; GCN-NEXT:    s_clause 0x1
 ; GCN-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
 ; GCN-NEXT:    s_load_b64 s[2:3], s[4:5], 0x0 nv
-; GCN-NEXT:    v_mov_b32_e32 v0, 0
+; GCN-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
 ; GCN-NEXT:    s_mov_b32 s6, 0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GCN-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v2, v0
-; GCN-NEXT:    v_dual_mov_b32 v3, v0 :: v_dual_mov_b32 v4, v0
-; GCN-NEXT:    v_dual_mov_b32 v5, v0 :: v_dual_mov_b32 v6, v0
-; GCN-NEXT:    v_dual_mov_b32 v7, v0 :: v_dual_mov_b32 v8, v0
-; GCN-NEXT:    v_dual_mov_b32 v9, v0 :: v_dual_mov_b32 v10, v0
-; GCN-NEXT:    v_dual_mov_b32 v11, v0 :: v_dual_mov_b32 v12, v0
-; GCN-NEXT:    v_dual_mov_b32 v13, v0 :: v_dual_mov_b32 v14, v0
+; GCN-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0
+; GCN-NEXT:    v_dual_mov_b32 v4, v0 :: v_dual_mov_b32 v5, v0
+; GCN-NEXT:    v_dual_mov_b32 v6, v0 :: v_dual_mov_b32 v7, v0
+; GCN-NEXT:    v_dual_mov_b32 v8, v0 :: v_dual_mov_b32 v9, v0
+; GCN-NEXT:    v_dual_mov_b32 v10, v0 :: v_dual_mov_b32 v11, v0
+; GCN-NEXT:    v_dual_mov_b32 v12, v0 :: v_dual_mov_b32 v13, v0
+; GCN-NEXT:    v_dual_mov_b32 v14, v0 :: v_dual_mov_b32 v15, v0
 ; GCN-NEXT:    s_wait_kmcnt 0x0
 ; GCN-NEXT:    s_bitcmp1_b32 s0, 0
-; GCN-NEXT:    v_dual_mov_b32 v15, v0 :: v_dual_mov_b32 v16, v0
+; GCN-NEXT:    v_dual_mov_b32 v16, v0 :: v_dual_mov_b32 v17, v0
 ; GCN-NEXT:    s_cselect_b32 s0, -1, 0
-; GCN-NEXT:    v_dual_mov_b32 v17, v0 :: v_dual_mov_b32 v18, v0
+; GCN-NEXT:    v_dual_mov_b32 v18, v0 :: v_dual_mov_b32 v19, v0
 ; GCN-NEXT:    s_xor_b32 s0, s0, -1
-; GCN-NEXT:    v_dual_mov_b32 v19, v0 :: v_dual_mov_b32 v20, v0
+; GCN-NEXT:    v_dual_mov_b32 v20, v0 :: v_dual_mov_b32 v21, v0
 ; GCN-NEXT:    v_cndmask_b32_e64 v24, 0, 1, s0
-; GCN-NEXT:    v_dual_mov_b32 v21, v0 :: v_dual_mov_b32 v22, v0
-; GCN-NEXT:    v_dual_mov_b32 v23, v0 :: v_dual_mov_b32 v25, v0
-; GCN-NEXT:    v_mov_b32_e32 v26, v0
+; GCN-NEXT:    v_dual_mov_b32 v22, v0 :: v_dual_mov_b32 v23, v0
+; GCN-NEXT:    v_dual_mov_b32 v25, v0 :: v_dual_mov_b32 v26, v0
+; GCN-NEXT:    v_mov_b32_e32 v27, v0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_4)
 ; GCN-NEXT:    v_cmp_ne_u32_e64 s0, 1, v24
-; GCN-NEXT:    v_dual_mov_b32 v24, v0 :: v_dual_mov_b32 v27, v0
-; GCN-NEXT:    v_dual_mov_b32 v28, v0 :: v_dual_mov_b32 v29, v0
-; GCN-NEXT:    v_dual_mov_b32 v30, v0 :: v_dual_mov_b32 v31, v0
+; GCN-NEXT:    v_dual_mov_b32 v24, v0 :: v_dual_mov_b32 v28, v0
+; GCN-NEXT:    v_dual_mov_b32 v29, v0 :: v_dual_mov_b32 v30, v0
+; GCN-NEXT:    v_mov_b32_e32 v31, v0
 ; GCN-NEXT:  .LBB1_1: ; %loop
 ; GCN-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GCN-NEXT:    s_add_co_i32 s7, s2, s6

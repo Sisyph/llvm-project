@@ -295,10 +295,9 @@ define amdgpu_ps void @cluster_load_async_to_lds_b64_saddr_no_scale_offset(ptr a
 ; GFX1250-LABEL: cluster_load_async_to_lds_b64_saddr_no_scale_offset:
 ; GFX1250:       ; %bb.0: ; %entry
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v2, v1
+; GFX1250-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_ashrrev_i32 v3, 31, v2
 ; GFX1250-NEXT:    s_mov_b32 m0, s2
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX1250-NEXT:    v_ashrrev_i32_e32 v3, 31, v2
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX1250-NEXT:    v_lshl_add_u64 v[2:3], v[2:3], 2, s[0:1]
 ; GFX1250-NEXT:    cluster_load_async_to_lds_b64 v0, v[2:3], off offset:16 th:TH_LOAD_NT
 ; GFX1250-NEXT:    s_endpgm

@@ -6163,8 +6163,7 @@ define bfloat @buffer_fat_ptr_agent_atomic_fadd_ret_bf16__offset__waterfall__amd
 ; GFX12-FAKE16-NEXT:    v_lshlrev_b32_e32 v4, v7, v4
 ; GFX12-FAKE16-NEXT:    v_and_or_b32 v5, v6, v9, v4
 ; GFX12-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX12-FAKE16-NEXT:    v_mov_b32_e32 v4, v5
-; GFX12-FAKE16-NEXT:    v_mov_b32_e32 v5, v6
+; GFX12-FAKE16-NEXT:    v_dual_mov_b32 v4, v5 :: v_dual_mov_b32 v5, v6
 ; GFX12-FAKE16-NEXT:  .LBB18_4: ; Parent Loop BB18_3 Depth=1
 ; GFX12-FAKE16-NEXT:    ; => This Inner Loop Header: Depth=2
 ; GFX12-FAKE16-NEXT:    v_readfirstlane_b32 s4, v0

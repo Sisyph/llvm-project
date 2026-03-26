@@ -56,9 +56,7 @@ define amdgpu_ps void @raw_buffer_load_i8_tfe(<4 x i32> inreg %rsrc, ptr addrspa
 ;
 ; GFX1200-LABEL: raw_buffer_load_i8_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    buffer_load_u8 v[4:5], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b8 v[0:1], v4, off
@@ -68,9 +66,7 @@ define amdgpu_ps void @raw_buffer_load_i8_tfe(<4 x i32> inreg %rsrc, ptr addrspa
 ; GFX1250-LABEL: raw_buffer_load_i8_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    buffer_load_u8 v[4:5], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b8 v[0:1], v4, off
@@ -132,9 +128,7 @@ define amdgpu_ps void @raw_buffer_load_i16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX1200-LABEL: raw_buffer_load_i16_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b16 v[0:1], v4, off
@@ -144,9 +138,7 @@ define amdgpu_ps void @raw_buffer_load_i16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ; GFX1250-LABEL: raw_buffer_load_i16_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b16 v[0:1], v4, off
@@ -208,9 +200,7 @@ define amdgpu_ps void @raw_buffer_load_f16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX1200-LABEL: raw_buffer_load_f16_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b16 v[0:1], v4, off
@@ -220,9 +210,7 @@ define amdgpu_ps void @raw_buffer_load_f16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ; GFX1250-LABEL: raw_buffer_load_f16_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b16 v[0:1], v4, off
@@ -284,9 +272,7 @@ define amdgpu_ps void @raw_buffer_load_i32_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX1200-LABEL: raw_buffer_load_i32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    buffer_load_b32 v[4:5], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b32 v[0:1], v4, off
@@ -296,9 +282,7 @@ define amdgpu_ps void @raw_buffer_load_i32_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ; GFX1250-LABEL: raw_buffer_load_i32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_mov_b32_e32 v5, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    buffer_load_b32 v[4:5], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b32 v[0:1], v4, off
@@ -380,9 +364,9 @@ define amdgpu_ps void @raw_buffer_load_v2i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v2i32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
+; GFX1200-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX1200-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b64 v[0:1], v[4:5], off
@@ -392,9 +376,9 @@ define amdgpu_ps void @raw_buffer_load_v2i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v2i32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
+; GFX1250-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX1250-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b64 v[0:1], v[4:5], off
@@ -476,9 +460,9 @@ define amdgpu_ps void @raw_buffer_load_v2f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v2f32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
+; GFX1200-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX1200-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b64 v[0:1], v[4:5], off
@@ -488,9 +472,9 @@ define amdgpu_ps void @raw_buffer_load_v2f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v2f32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
+; GFX1250-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX1250-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b64 v[0:1], v[4:5], off
@@ -577,10 +561,9 @@ define amdgpu_ps void @raw_buffer_load_v3i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v3i32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1200-NEXT:    v_mov_b32_e32 v7, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
 ; GFX1200-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b96 v[0:1], v[4:6], off
@@ -590,10 +573,9 @@ define amdgpu_ps void @raw_buffer_load_v3i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v3i32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1250-NEXT:    v_mov_b32_e32 v7, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
 ; GFX1250-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b96 v[0:1], v[4:6], off
@@ -680,10 +662,9 @@ define amdgpu_ps void @raw_buffer_load_v3f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v3f32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1200-NEXT:    v_mov_b32_e32 v7, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
 ; GFX1200-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b96 v[0:1], v[4:6], off
@@ -693,10 +674,9 @@ define amdgpu_ps void @raw_buffer_load_v3f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v3f32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1250-NEXT:    v_mov_b32_e32 v7, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
 ; GFX1250-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b96 v[0:1], v[4:6], off
@@ -770,10 +750,10 @@ define amdgpu_ps void @raw_buffer_load_v4i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v4i32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1200-NEXT:    v_dual_mov_b32 v7, v4 :: v_dual_mov_b32 v8, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
+; GFX1200-NEXT:    v_mov_b32_e32 v8, v4
 ; GFX1200-NEXT:    buffer_load_b128 v[4:8], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b128 v[0:1], v[4:7], off
@@ -783,10 +763,10 @@ define amdgpu_ps void @raw_buffer_load_v4i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v4i32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1250-NEXT:    v_dual_mov_b32 v7, v4 :: v_dual_mov_b32 v8, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
+; GFX1250-NEXT:    v_mov_b32_e32 v8, v4
 ; GFX1250-NEXT:    buffer_load_b128 v[4:8], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b128 v[0:1], v[4:7], off
@@ -860,10 +840,10 @@ define amdgpu_ps void @raw_buffer_load_v4f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX1200-LABEL: raw_buffer_load_v4f32_tfe:
 ; GFX1200:       ; %bb.0:
-; GFX1200-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1200-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1200-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1200-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1200-NEXT:    v_dual_mov_b32 v7, v4 :: v_dual_mov_b32 v8, v4
+; GFX1200-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
+; GFX1200-NEXT:    v_mov_b32_e32 v8, v4
 ; GFX1200-NEXT:    buffer_load_b128 v[4:8], off, s[0:3], null tfe
 ; GFX1200-NEXT:    s_wait_loadcnt 0x0
 ; GFX1200-NEXT:    global_store_b128 v[0:1], v[4:7], off
@@ -873,10 +853,10 @@ define amdgpu_ps void @raw_buffer_load_v4f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ; GFX1250-LABEL: raw_buffer_load_v4f32_tfe:
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GFX1250-NEXT:    v_mov_b32_e32 v4, 0
+; GFX1250-NEXT:    v_dual_mov_b32 v4, 0 :: v_dual_mov_b32 v5, v4
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1250-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v6, v4
-; GFX1250-NEXT:    v_dual_mov_b32 v7, v4 :: v_dual_mov_b32 v8, v4
+; GFX1250-NEXT:    v_dual_mov_b32 v6, v4 :: v_dual_mov_b32 v7, v4
+; GFX1250-NEXT:    v_mov_b32_e32 v8, v4
 ; GFX1250-NEXT:    buffer_load_b128 v[4:8], off, s[0:3], null tfe
 ; GFX1250-NEXT:    s_wait_loadcnt 0x0
 ; GFX1250-NEXT:    global_store_b128 v[0:1], v[4:7], off

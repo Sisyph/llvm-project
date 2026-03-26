@@ -4519,15 +4519,13 @@ body:             |
     ; PAIR: $vgpr6 = IMPLICIT_DEF
     ; PAIR-NEXT: $vgpr5 = IMPLICIT_DEF
     ; PAIR-NEXT: $sgpr15 = IMPLICIT_DEF
-    ; PAIR-NEXT: $vgpr6 = V_LSHLREV_B32_e32 8, killed $vgpr5, implicit $mode, implicit $exec
-    ; PAIR-NEXT: $vgpr7 = V_XOR_B32_e32 killed $sgpr15, killed $vgpr6, implicit $exec
+    ; PAIR-NEXT: $vgpr6, $vgpr7 = V_DUAL_LSHLREV_B32_e32_X_BITOP2_B32_e64_e96_gfx1250 8, killed $vgpr5, killed $sgpr15, killed $vgpr6, 20, implicit $exec, implicit $mode, implicit $exec, implicit $exec
     ;
     ; LOWER-LABEL: name: no_combine_opx_writes_opy_src
     ; LOWER: $vgpr6 = IMPLICIT_DEF
     ; LOWER-NEXT: $vgpr5 = IMPLICIT_DEF
     ; LOWER-NEXT: $sgpr15 = IMPLICIT_DEF
-    ; LOWER-NEXT: $vgpr6 = V_LSHLREV_B32_e32 8, killed $vgpr5, implicit $mode, implicit $exec
-    ; LOWER-NEXT: $vgpr7 = V_XOR_B32_e32 killed $sgpr15, killed $vgpr6, implicit $exec
+    ; LOWER-NEXT: $vgpr6, $vgpr7 = V_DUAL_LSHLREV_B32_e32_X_BITOP2_B32_e64_e96_gfx1250 8, killed $vgpr5, killed $sgpr15, killed $vgpr6, 20, implicit $exec, implicit $mode, implicit $exec, implicit $exec
     $vgpr5 = IMPLICIT_DEF
     $vgpr6 = IMPLICIT_DEF
     $sgpr15 = IMPLICIT_DEF
@@ -4552,15 +4550,13 @@ body:             |
     ; PAIR: $vgpr6 = IMPLICIT_DEF
     ; PAIR-NEXT: $vgpr5 = IMPLICIT_DEF
     ; PAIR-NEXT: $sgpr15 = IMPLICIT_DEF
-    ; PAIR-NEXT: $vgpr7 = V_XOR_B32_e32 killed $sgpr15, killed $vgpr6, implicit $exec
-    ; PAIR-NEXT: $vgpr6 = V_LSHLREV_B32_e32 8, killed $vgpr5, implicit $mode, implicit $exec
+    ; PAIR-NEXT: $vgpr6, $vgpr7 = V_DUAL_LSHLREV_B32_e32_X_BITOP2_B32_e64_e96_gfx1250 8, killed $vgpr5, killed $sgpr15, killed $vgpr6, 20, implicit $exec, implicit $mode, implicit $exec, implicit $exec
     ;
     ; LOWER-LABEL: name: no_combine_opx_writes_opy_src_reorder
     ; LOWER: $vgpr6 = IMPLICIT_DEF
     ; LOWER-NEXT: $vgpr5 = IMPLICIT_DEF
     ; LOWER-NEXT: $sgpr15 = IMPLICIT_DEF
-    ; LOWER-NEXT: $vgpr7 = V_XOR_B32_e32 killed $sgpr15, killed $vgpr6, implicit $exec
-    ; LOWER-NEXT: $vgpr6 = V_LSHLREV_B32_e32 8, killed $vgpr5, implicit $mode, implicit $exec
+    ; LOWER-NEXT: $vgpr6, $vgpr7 = V_DUAL_LSHLREV_B32_e32_X_BITOP2_B32_e64_e96_gfx1250 8, killed $vgpr5, killed $sgpr15, killed $vgpr6, 20, implicit $exec, implicit $mode, implicit $exec, implicit $exec
     $vgpr5 = IMPLICIT_DEF
     $vgpr6 = IMPLICIT_DEF
     $sgpr15 = IMPLICIT_DEF

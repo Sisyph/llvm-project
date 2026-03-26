@@ -405,19 +405,19 @@ define amdgpu_ps half @fptrunc_f64_to_f16_div(double %a) {
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX1250-NEXT:    v_cndmask_b32_e32 v3, v4, v3, vcc_lo
 ; GFX1250-NEXT:    v_and_b32_e32 v4, 7, v3
-; GFX1250-NEXT:    v_lshrrev_b32_e32 v3, 2, v3
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX1250-NEXT:    v_cmp_eq_u32_e32 vcc_lo, 3, v4
 ; GFX1250-NEXT:    v_cmp_lt_i32_e64 s0, 5, v4
 ; GFX1250-NEXT:    s_or_b32 s0, vcc_lo, s0
 ; GFX1250-NEXT:    v_cmp_ne_u32_e32 vcc_lo, 0, v0
 ; GFX1250-NEXT:    v_cndmask_b32_e64 v4, 0, 1, s0
 ; GFX1250-NEXT:    v_cndmask_b32_e64 v0, 0, 1, vcc_lo
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_3)
-; GFX1250-NEXT:    v_add_nc_u32_e32 v3, v3, v4
 ; GFX1250-NEXT:    v_cmp_lt_i32_e32 vcc_lo, 30, v2
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_1)
 ; GFX1250-NEXT:    v_lshl_or_b32 v0, v0, 9, 0x7c00
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX1250-NEXT:    v_lshrrev_b32_e32 v3, 2, v3
+; GFX1250-NEXT:    v_add_nc_u32_e32 v3, v3, v4
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
 ; GFX1250-NEXT:    v_cndmask_b32_e64 v3, v3, 0x7c00, vcc_lo
 ; GFX1250-NEXT:    v_cmp_eq_u32_e32 vcc_lo, 0x40f, v2
 ; GFX1250-NEXT:    v_cndmask_b32_e32 v0, v3, v0, vcc_lo
