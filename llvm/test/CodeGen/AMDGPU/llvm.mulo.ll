@@ -824,7 +824,8 @@ define { i64, i1 } @umulo_i64_v_4(i64 %i) {
 ; GFX11-LABEL: umulo_i64_v_4:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v6, v0 :: v_dual_and_b32 v7, 0x3fffffff, v1
+; GFX11-NEXT:    v_and_b32_e32 v7, 0x3fffffff, v1
+; GFX11-NEXT:    v_mov_b32_e32 v6, v0
 ; GFX11-NEXT:    v_lshlrev_b64 v[4:5], 2, v[0:1]
 ; GFX11-NEXT:    v_alignbit_b32 v3, v1, v0, 30
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)

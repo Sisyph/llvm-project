@@ -396,7 +396,7 @@ define amdgpu_ps <2 x float> @flat_atomicrmw_b64_rtn_idxprom(ptr align 8 inreg %
 ; GISEL-LABEL: flat_atomicrmw_b64_rtn_idxprom:
 ; GISEL:       ; %bb.0: ; %entry
 ; GISEL-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
-; GISEL-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_ashrrev_i32 v3, 31, v2
+; GISEL-NEXT:    v_dual_ashrrev_i32 v3, 31, v2 :: v_dual_mov_b32 v2, v0
 ; GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GISEL-NEXT:    v_lshl_add_u64 v[4:5], v[2:3], 3, s[0:1]
 ; GISEL-NEXT:    v_xor_b32_e32 v0, src_flat_scratch_base_hi, v5

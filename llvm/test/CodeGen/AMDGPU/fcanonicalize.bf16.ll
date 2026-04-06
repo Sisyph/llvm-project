@@ -1374,7 +1374,7 @@ define amdgpu_kernel void @s_test_canonicalize_undef_v4bf16(ptr addrspace(1) %ou
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
 ; GFX1250-NEXT:    s_load_b64 s[0:1], s[4:5], 0x24 nv
-; GFX1250-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; GFX1250-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
 ; GFX1250-NEXT:    global_store_b64 v0, v[0:1], s[0:1]
 ; GFX1250-NEXT:    s_endpgm

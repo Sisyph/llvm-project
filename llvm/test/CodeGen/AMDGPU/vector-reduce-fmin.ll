@@ -2907,7 +2907,7 @@ define float @test_vector_reduce_fmin_v16float(<16 x float> %v) {
 ; GFX12-GISEL-NEXT:    v_dual_min_num_f32 v1, v2, v3 :: v_dual_min_num_f32 v2, v4, v5
 ; GFX12-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX12-GISEL-NEXT:    v_dual_min_num_f32 v3, v6, v7 :: v_dual_min_num_f32 v0, v0, v1
-; GFX12-GISEL-NEXT:    v_dual_min_num_f32 v1, v2, v3 :: v_dual_min_num_f32 v0, v0, v1
+; GFX12-GISEL-NEXT:    v_dual_min_num_f32 v0, v0, v1 :: v_dual_min_num_f32 v1, v2, v3
 ; GFX12-GISEL-NEXT:    s_setpc_b64 s[30:31]
 entry:
   %res = call float @llvm.vector.reduce.fmin.v16float(<16 x float> %v)

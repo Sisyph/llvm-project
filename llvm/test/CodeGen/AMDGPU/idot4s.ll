@@ -348,9 +348,9 @@ define amdgpu_kernel void @idot4_acc16(ptr addrspace(1) %src1,
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    s_load_b128 s[0:3], s[4:5], 0x24
 ; GFX11-DL-NEXT:    s_load_b64 s[4:5], s[4:5], 0x34
-; GFX11-DL-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-DL-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
 ; GFX11-DL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-DL-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-DL-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v0, 2, v0
 ; GFX11-DL-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    global_load_b32 v2, v0, s[0:1]
@@ -533,9 +533,9 @@ define amdgpu_kernel void @idot4_acc8(ptr addrspace(1) %src1,
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    s_load_b128 s[0:3], s[4:5], 0x24
 ; GFX11-DL-NEXT:    s_load_b64 s[4:5], s[4:5], 0x34
-; GFX11-DL-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-DL-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
 ; GFX11-DL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-DL-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-DL-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v0, 2, v0
 ; GFX11-DL-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    global_load_b32 v2, v0, s[0:1]
@@ -1159,9 +1159,10 @@ define amdgpu_kernel void @idot4_acc16_vecMul(ptr addrspace(1) %src1,
 ; GFX11-DL-TRUE16-LABEL: idot4_acc16_vecMul:
 ; GFX11-DL-TRUE16:       ; %bb.0: ; %entry
 ; GFX11-DL-TRUE16-NEXT:    s_load_b128 s[0:3], s[4:5], 0x24
-; GFX11-DL-TRUE16-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-DL-TRUE16-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX11-DL-TRUE16-NEXT:    v_mov_b32_e32 v3, 0
 ; GFX11-DL-TRUE16-NEXT:    s_load_b64 s[4:5], s[4:5], 0x34
-; GFX11-DL-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-DL-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-DL-TRUE16-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
 ; GFX11-DL-TRUE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-DL-TRUE16-NEXT:    s_clause 0x1
@@ -2547,9 +2548,9 @@ define amdgpu_kernel void @idot4_bad_source(ptr addrspace(1) %src1,
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    s_load_b128 s[0:3], s[4:5], 0x24
 ; GFX11-DL-NEXT:    s_load_b32 s6, s[4:5], 0x3c
-; GFX11-DL-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-DL-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
 ; GFX11-DL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-DL-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-DL-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_lshlrev_b32 v0, 2, v0
 ; GFX11-DL-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-DL-NEXT:    s_clause 0x1
 ; GFX11-DL-NEXT:    global_load_b32 v1, v0, s[0:1]

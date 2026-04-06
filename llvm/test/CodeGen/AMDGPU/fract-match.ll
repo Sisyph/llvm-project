@@ -6134,10 +6134,10 @@ define float @fract_pat_minimum(float %x, ptr addrspace(1) %iptr) #0 {
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_floor_f32_e32 v3, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_3) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_sub_f32_e32 v4, v0, v3
-; GFX11-NEXT:    global_store_b32 v[1:2], v3, off
 ; GFX11-NEXT:    v_min_f32_e32 v5, 0x3f7fffff, v4
+; GFX11-NEXT:    global_store_b32 v[1:2], v3, off
 ; GFX11-NEXT:    v_cmp_o_f32_e32 vcc_lo, v4, v4
 ; GFX11-NEXT:    v_cndmask_b32_e32 v4, 0x7fc00000, v5, vcc_lo
 ; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
@@ -6357,12 +6357,13 @@ define <2 x float> @core_fract_pat_fcmp_oge_select_v2f32(<2 x float> %x) #0 {
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_floor_f32_e32 v2, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_sub_f32_e32 v0, v0, v2
 ; GFX11-NEXT:    v_floor_f32_e32 v2, v1
+; GFX11-NEXT:    v_sub_f32_e32 v1, v1, v2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX11-NEXT:    v_cmp_nle_f32_e32 vcc_lo, 0x3f7fffff, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NEXT:    v_dual_sub_f32 v1, v1, v2 :: v_dual_cndmask_b32 v0, 0x3f7fffff, v0
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0x3f7fffff, v0, vcc_lo
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: core_fract_pat_fcmp_oge_select_v2f32:
@@ -6373,13 +6374,14 @@ define <2 x float> @core_fract_pat_fcmp_oge_select_v2f32(<2 x float> %x) #0 {
 ; GFX12-NEXT:    s_wait_bvhcnt 0x0
 ; GFX12-NEXT:    s_wait_kmcnt 0x0
 ; GFX12-NEXT:    v_floor_f32_e32 v2, v0
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_sub_f32_e32 v0, v0, v2
 ; GFX12-NEXT:    v_floor_f32_e32 v2, v1
+; GFX12-NEXT:    v_sub_f32_e32 v1, v1, v2
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX12-NEXT:    v_cmp_nle_f32_e32 vcc_lo, 0x3f7fffff, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX12-NEXT:    v_dual_sub_f32 v1, v1, v2 :: v_dual_cndmask_b32 v0, 0x3f7fffff, v0
+; GFX12-NEXT:    v_cndmask_b32_e32 v0, 0x3f7fffff, v0, vcc_lo
 ; GFX12-NEXT:    s_setpc_b64 s[30:31]
 ; IR-LABEL: define <2 x float> @core_fract_pat_fcmp_oge_select_v2f32(
 ; IR-SAME: <2 x float> [[X:%.*]]) #[[ATTR1]] {

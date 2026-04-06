@@ -912,10 +912,11 @@ define <2 x i128> @v_and_v2i128_inline_imm(<2 x i128> %a) {
 ; GFX11-LABEL: v_and_v2i128_inline_imm:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 64, v0
-; GFX11-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_and_b32 v4, 64, v4
-; GFX11-NEXT:    v_dual_mov_b32 v2, 0 :: v_dual_mov_b32 v5, 0
-; GFX11-NEXT:    v_dual_mov_b32 v6, 0 :: v_dual_mov_b32 v7, 0
+; GFX11-NEXT:    v_and_b32_e32 v0, 64, v0
+; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v4, 64, v4
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_mov_b32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, 0 :: v_dual_mov_b32 v6, 0
+; GFX11-NEXT:    v_mov_b32_e32 v7, 0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: v_and_v2i128_inline_imm:

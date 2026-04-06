@@ -127,6 +127,13 @@ public:
     return true;
   }
 
+  /// Returns true if MI is a F64 instruction that requires strict
+  /// VOPD formation constraints (OpX cannot write to OpY's source registers).
+  static bool isMulticycleOp(const MachineInstr &MI, const GCNSubtarget &ST) {
+    unsigned Opc = MI.getOpcode();
+    return AMDGPU::isDPMACCInstruction(Opc);
+  }
+
   bool run(MachineFunction &MF) {
     ST = &MF.getSubtarget<GCNSubtarget>();
     if (!AMDGPU::hasVOPD(*ST) || !ST->isWave32())
@@ -161,21 +168,35 @@ public:
           llvm::AMDGPU::CanBeVOPD SecondCanBeVOPD =
               AMDGPU::getCanBeVOPD(Opc2, EncodingFamily, VOPD3);
 
-          if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y &&
-              llvm::checkVOPDRegConstraints(*SII, *FirstMI, *SecondMI, VOPD3)) {
+          bool AllowSameVGPR = ST->hasGFX1250Insts(); // Only VOPD3 allows same VGPR
+          // If SecondMI depends on FirstMI, they cannot be executed at the same time.
+          const auto DataDependency = [&]() -> bool {
+            for (const auto &Use : SecondMI->uses())
+              if (Use.isReg() && FirstMI->modifiesRegister(Use.getReg(), TRI))
+                return true;
+            return false;
+          };
+          if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y && !DataDependency() && 
+              llvm::checkVOPDRegConstraints(*SII, *FirstMI, *SecondMI, VOPD3, AllowSameVGPR)) {
             CI = VOPDCombineInfo(FirstMI, SecondMI, VOPD3);
             return true;
           }
-          // We can try swapping the order of the instructions, but in that case
-          // neither instruction can write to a register the other reads from.
-          // OpX cannot write something OpY reads because that is the hardware
-          // rule, and OpY cannot write what OpX reads because that would
-          // violate the data dependency in the original order.
-          for (const auto &Use : SecondMI->uses())
-            if (Use.isReg() && FirstMI->modifiesRegister(Use.getReg(), TRI))
-              return false;
-          if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X &&
-              llvm::checkVOPDRegConstraints(*SII, *SecondMI, *FirstMI, VOPD3)) {
+          // If SecondMI writes a source of FirstMI (write after read in the
+          // original program order), we could form a legal VOPD as SecondMI ::
+          // FirstMI. FirstMI will read the value before SecondMI overwrites it.
+          // But if the formed VOPD would take multiple cycles to issue, this
+          // won't work. Before GFX12 this is disallowed as well.
+
+          const auto Antidependency = [&]() -> bool {
+            for (const auto &Use : FirstMI->uses())
+              if (Use.isReg() && SecondMI->modifiesRegister(Use.getReg(), TRI))
+                AllowSameVGPR = false;
+                if (AMDGPU::isNotGFX12Plus(*ST) || isMulticycleOp(*SecondMI, *ST))
+                  return false;
+            return true;
+          };
+          if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X && Antidependency() &&
+              llvm::checkVOPDRegConstraints(*SII, *SecondMI, *FirstMI, VOPD3, AllowSameVGPR)) {
             CI = VOPDCombineInfo(SecondMI, FirstMI, VOPD3);
             return true;
           }

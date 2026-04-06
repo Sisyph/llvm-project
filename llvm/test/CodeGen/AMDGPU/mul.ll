@@ -3558,7 +3558,7 @@ define amdgpu_kernel void @v_mul_i128(ptr addrspace(1) %out, ptr addrspace(1) %a
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
 ; GFX1250-NEXT:    s_load_b128 s[0:3], s[4:5], 0x2c nv
 ; GFX1250-NEXT:    v_and_b32_e32 v16, 0x3ff, v0
-; GFX1250-NEXT:    v_dual_mov_b32 v11, 0 :: v_dual_mov_b32 v9, v11
+; GFX1250-NEXT:    v_dual_mov_b32 v9, v11 :: v_dual_mov_b32 v11, 0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
 ; GFX1250-NEXT:    s_clause 0x1
 ; GFX1250-NEXT:    global_load_b128 v[0:3], v16, s[2:3] scale_offset

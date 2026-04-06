@@ -97,7 +97,7 @@ define amdgpu_kernel void @ds_wmma(ptr addrspace(3) %base, ptr addrspace(1) %out
 ; GCN-NEXT:    s_clause 0x1
 ; GCN-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
 ; GCN-NEXT:    s_load_b32 s2, s[4:5], 0x0 nv
-; GCN-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; GCN-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GCN-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0
 ; GCN-NEXT:    v_dual_mov_b32 v4, v0 :: v_dual_mov_b32 v5, v0
@@ -256,7 +256,7 @@ define amdgpu_kernel void @ds_wmma_permute(ptr addrspace(3) %base, ptr addrspace
 ; COEXEC-NEXT:    s_clause 0x1
 ; COEXEC-NEXT:    s_load_b64 s[2:3], s[4:5], 0x0 nv
 ; COEXEC-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
-; COEXEC-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; COEXEC-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; COEXEC-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_4) | instid1(SALU_CYCLE_1)
 ; COEXEC-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0
 ; COEXEC-NEXT:    s_wait_kmcnt 0x0
@@ -373,7 +373,7 @@ define amdgpu_kernel void @ds_wmma_permute(ptr addrspace(3) %base, ptr addrspace
 ; GCN-NEXT:    s_clause 0x1
 ; GCN-NEXT:    s_load_b64 s[0:1], s[4:5], 0x10 nv
 ; GCN-NEXT:    s_load_b64 s[2:3], s[4:5], 0x0 nv
-; GCN-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; GCN-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; GCN-NEXT:    s_mov_b32 s6, 0
 ; GCN-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GCN-NEXT:    v_dual_mov_b32 v2, v0 :: v_dual_mov_b32 v3, v0

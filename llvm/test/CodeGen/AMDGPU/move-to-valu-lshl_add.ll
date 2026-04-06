@@ -98,7 +98,7 @@ define amdgpu_kernel void @lshl4_add(ptr addrspace(1) %in, ptr addrspace(7) %in2
 ; CHECK-NEXT:    s_clause 0x1
 ; CHECK-NEXT:    s_load_b64 s[6:7], s[4:5], 0x24
 ; CHECK-NEXT:    s_load_b128 s[0:3], s[4:5], 0x44
-; CHECK-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v0
+; CHECK-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; CHECK-NEXT:    s_load_b32 s5, s[4:5], 0x54
 ; CHECK-NEXT:    s_mov_b32 s4, 0
 ; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1)

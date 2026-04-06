@@ -361,10 +361,11 @@ define amdgpu_kernel void @image_bvh_intersect_ray_nsa_reassign(ptr %p_node_ptr,
 ; GFX11-LABEL: image_bvh_intersect_ray_nsa_reassign:
 ; GFX11:       ; %bb.0: ; %main_body
 ; GFX11-NEXT:    s_load_b256 s[0:7], s[4:5], 0x24
-; GFX11-NEXT:    v_dual_mov_b32 v7, 1.0 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX11-NEXT:    v_mov_b32_e32 v7, 1.0
 ; GFX11-NEXT:    v_dual_mov_b32 v5, 0x40a00000 :: v_dual_mov_b32 v6, 0
 ; GFX11-NEXT:    v_mov_b32_e32 v8, 2.0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_2) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_2) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_lshlrev_b32_e32 v2, 2, v0
 ; GFX11-NEXT:    v_mov_b32_e32 v4, 4.0
 ; GFX11-NEXT:    s_waitcnt lgkmcnt(0)
@@ -677,12 +678,12 @@ define amdgpu_kernel void @image_bvh64_intersect_ray_nsa_reassign(ptr %p_ray, <4
 ; GFX11-NEXT:    s_clause 0x1
 ; GFX11-NEXT:    s_load_b64 s[6:7], s[4:5], 0x24
 ; GFX11-NEXT:    s_load_b128 s[0:3], s[4:5], 0x34
-; GFX11-NEXT:    v_dual_mov_b32 v7, 1.0 :: v_dual_and_b32 v0, 0x3ff, v0
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0x41000000
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX11-NEXT:    v_dual_mov_b32 v7, 1.0 :: v_dual_mov_b32 v2, 0x41000000
 ; GFX11-NEXT:    v_dual_mov_b32 v3, 0x40400000 :: v_dual_mov_b32 v4, 4.0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
-; GFX11-NEXT:    v_dual_mov_b32 v5, 0x40a00000 :: v_dual_lshlrev_b32 v0, 2, v0
-; GFX11-NEXT:    v_mov_b32_e32 v6, 0
+; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-NEXT:    v_dual_mov_b32 v5, 0x40a00000 :: v_dual_mov_b32 v6, 0
 ; GFX11-NEXT:    v_dual_mov_b32 v8, 2.0 :: v_dual_mov_b32 v9, 0xb36211c7
 ; GFX11-NEXT:    v_bfrev_b32_e32 v10, 4.0
 ; GFX11-NEXT:    s_waitcnt lgkmcnt(0)
@@ -832,8 +833,8 @@ define amdgpu_kernel void @image_bvh64_intersect_ray_a16_nsa_reassign(ptr %p_ray
 ; GFX11-NEXT:    s_clause 0x1
 ; GFX11-NEXT:    s_load_b64 s[6:7], s[4:5], 0x24
 ; GFX11-NEXT:    s_load_b128 s[0:3], s[4:5], 0x34
-; GFX11-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_and_b32 v0, 0x3ff, v0
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0x48004500
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_mov_b32 v2, 0x48004500
 ; GFX11-NEXT:    v_mov_b32_e32 v4, 1.0
 ; GFX11-NEXT:    v_mov_b32_e32 v6, 0xb36211c6
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_3) | instid1(VALU_DEP_3)

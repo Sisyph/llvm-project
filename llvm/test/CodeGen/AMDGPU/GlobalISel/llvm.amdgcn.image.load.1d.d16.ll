@@ -1110,7 +1110,6 @@ define amdgpu_ps float @load_1d_f16_tfe_dmask_x(<8 x i32> inreg %rsrc, i32 %s) {
 ;
 ; GFX11-LABEL: load_1d_f16_tfe_dmask_x:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX11-NEXT:    s_mov_b32 s0, s2
 ; GFX11-NEXT:    s_mov_b32 s1, s3
 ; GFX11-NEXT:    s_mov_b32 s2, s4
@@ -1119,6 +1118,8 @@ define amdgpu_ps float @load_1d_f16_tfe_dmask_x(<8 x i32> inreg %rsrc, i32 %s) {
 ; GFX11-NEXT:    s_mov_b32 s5, s7
 ; GFX11-NEXT:    s_mov_b32 s6, s8
 ; GFX11-NEXT:    s_mov_b32 s7, s9
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_mov_b32_e32 v2, v1
 ; GFX11-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x1 dim:SQ_RSRC_IMG_1D unorm tfe d16
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1135,7 +1136,7 @@ define amdgpu_ps float @load_1d_f16_tfe_dmask_x(<8 x i32> inreg %rsrc, i32 %s) {
 ; GFX12-NEXT:    s_mov_b32 s5, s7
 ; GFX12-NEXT:    s_mov_b32 s6, s8
 ; GFX12-NEXT:    s_mov_b32 s7, s9
-; GFX12-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_mov_b32 v2, v1
+; GFX12-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v1, 0
 ; GFX12-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x1 dim:SQ_RSRC_IMG_1D tfe d16
 ; GFX12-NEXT:    s_wait_loadcnt 0x0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
@@ -1219,7 +1220,6 @@ define amdgpu_ps float @load_1d_v2f16_tfe_dmask_xy(<8 x i32> inreg %rsrc, i32 %s
 ;
 ; GFX11-LABEL: load_1d_v2f16_tfe_dmask_xy:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX11-NEXT:    s_mov_b32 s0, s2
 ; GFX11-NEXT:    s_mov_b32 s1, s3
 ; GFX11-NEXT:    s_mov_b32 s2, s4
@@ -1228,6 +1228,8 @@ define amdgpu_ps float @load_1d_v2f16_tfe_dmask_xy(<8 x i32> inreg %rsrc, i32 %s
 ; GFX11-NEXT:    s_mov_b32 s5, s7
 ; GFX11-NEXT:    s_mov_b32 s6, s8
 ; GFX11-NEXT:    s_mov_b32 s7, s9
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_mov_b32_e32 v2, v1
 ; GFX11-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x3 dim:SQ_RSRC_IMG_1D unorm tfe d16
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1244,7 +1246,7 @@ define amdgpu_ps float @load_1d_v2f16_tfe_dmask_xy(<8 x i32> inreg %rsrc, i32 %s
 ; GFX12-NEXT:    s_mov_b32 s5, s7
 ; GFX12-NEXT:    s_mov_b32 s6, s8
 ; GFX12-NEXT:    s_mov_b32 s7, s9
-; GFX12-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_mov_b32 v2, v1
+; GFX12-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v1, 0
 ; GFX12-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x3 dim:SQ_RSRC_IMG_1D tfe d16
 ; GFX12-NEXT:    s_wait_loadcnt 0x0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
@@ -1333,6 +1335,8 @@ define amdgpu_ps float @load_1d_v3f16_tfe_dmask_xyz(<8 x i32> inreg %rsrc, i32 %
 ; GFX11-LABEL: load_1d_v3f16_tfe_dmask_xyz:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    v_mov_b32_e32 v1, 0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_mov_b32_e32 v2, v1
 ; GFX11-NEXT:    s_mov_b32 s0, s2
 ; GFX11-NEXT:    s_mov_b32 s1, s3
 ; GFX11-NEXT:    s_mov_b32 s2, s4
@@ -1341,7 +1345,6 @@ define amdgpu_ps float @load_1d_v3f16_tfe_dmask_xyz(<8 x i32> inreg %rsrc, i32 %
 ; GFX11-NEXT:    s_mov_b32 s5, s7
 ; GFX11-NEXT:    s_mov_b32 s6, s8
 ; GFX11-NEXT:    s_mov_b32 s7, s9
-; GFX11-NEXT:    v_mov_b32_e32 v2, v1
 ; GFX11-NEXT:    v_mov_b32_e32 v3, v1
 ; GFX11-NEXT:    image_load v[1:3], v0, s[0:7] dmask:0x7 dim:SQ_RSRC_IMG_1D unorm tfe d16
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1350,7 +1353,7 @@ define amdgpu_ps float @load_1d_v3f16_tfe_dmask_xyz(<8 x i32> inreg %rsrc, i32 %
 ;
 ; GFX12-LABEL: load_1d_v3f16_tfe_dmask_xyz:
 ; GFX12:       ; %bb.0:
-; GFX12-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_mov_b32 v2, v1
+; GFX12-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v1, 0
 ; GFX12-NEXT:    s_mov_b32 s0, s2
 ; GFX12-NEXT:    s_mov_b32 s1, s3
 ; GFX12-NEXT:    s_mov_b32 s2, s4
@@ -1442,7 +1445,6 @@ define amdgpu_ps float @load_1d_v4f16_tfe_dmask_xyzw(<8 x i32> inreg %rsrc, i32 
 ;
 ; GFX11-LABEL: load_1d_v4f16_tfe_dmask_xyzw:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX11-NEXT:    s_mov_b32 s0, s2
 ; GFX11-NEXT:    s_mov_b32 s1, s3
 ; GFX11-NEXT:    s_mov_b32 s2, s4
@@ -1451,6 +1453,8 @@ define amdgpu_ps float @load_1d_v4f16_tfe_dmask_xyzw(<8 x i32> inreg %rsrc, i32 
 ; GFX11-NEXT:    s_mov_b32 s5, s7
 ; GFX11-NEXT:    s_mov_b32 s6, s8
 ; GFX11-NEXT:    s_mov_b32 s7, s9
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_mov_b32_e32 v2, v1
 ; GFX11-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x10 dim:SQ_RSRC_IMG_1D unorm tfe d16
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1467,7 +1471,7 @@ define amdgpu_ps float @load_1d_v4f16_tfe_dmask_xyzw(<8 x i32> inreg %rsrc, i32 
 ; GFX12-NEXT:    s_mov_b32 s5, s7
 ; GFX12-NEXT:    s_mov_b32 s6, s8
 ; GFX12-NEXT:    s_mov_b32 s7, s9
-; GFX12-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_mov_b32 v2, v1
+; GFX12-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v1, 0
 ; GFX12-NEXT:    image_load v[1:2], v0, s[0:7] dmask:0x10 dim:SQ_RSRC_IMG_1D tfe d16
 ; GFX12-NEXT:    s_wait_loadcnt 0x0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)

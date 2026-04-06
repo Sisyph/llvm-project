@@ -490,9 +490,9 @@ define <8 x half> @baz() nounwind {
 ; CHECK-NEXT:    v_dual_mov_b32 v40, v31 :: v_dual_mov_b32 v39, v30
 ; CHECK-NEXT:    v_dual_mov_b32 v38, v29 :: v_dual_mov_b32 v37, v28
 ; CHECK-NEXT:    v_dual_mov_b32 v36, v27 :: v_dual_mov_b32 v35, v26
-; CHECK-NEXT:    v_dual_mov_b32 v34, v25 :: v_dual_mov_b32 v33, v24
-; CHECK-NEXT:    v_dual_mov_b32 v32, v23 :: v_dual_mov_b32 v31, v22
-; CHECK-NEXT:    v_dual_mov_b32 v30, v21 :: v_dual_mov_b32 v29, v20
+; CHECK-NEXT:    v_dual_mov_b32 v33, v24 :: v_dual_mov_b32 v34, v25
+; CHECK-NEXT:    v_dual_mov_b32 v31, v22 :: v_dual_mov_b32 v32, v23
+; CHECK-NEXT:    v_dual_mov_b32 v29, v20 :: v_dual_mov_b32 v30, v21
 ; CHECK-NEXT:    v_mov_b32_e32 v28, v19
 ; CHECK-NEXT:    s_clause 0x3
 ; CHECK-NEXT:    scratch_store_b128 off, v[43:46], s32 offset:48

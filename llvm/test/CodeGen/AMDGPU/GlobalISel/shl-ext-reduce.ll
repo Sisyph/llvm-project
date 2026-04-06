@@ -54,8 +54,8 @@ define i64 @v_shl_i64_zext_i32(i32 %x) {
 ; GFX11-LABEL: v_shl_i64_zext_i32:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 0x3fffffff, v0
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x3fffffff, v0
+; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v0, 2, v0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
   %and = and i32 %x, 1073741823
   %ext = zext i32 %and to i64
@@ -103,8 +103,8 @@ define i64 @v_shl_i64_sext_i32(i32 %x) {
 ; GFX11-LABEL: v_shl_i64_sext_i32:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 0x1fffffff, v0
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x1fffffff, v0
+; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v0, 2, v0
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
   %and = and i32 %x, 536870911
   %ext = sext i32 %and to i64
@@ -297,7 +297,8 @@ define amdgpu_kernel void @mulu24_shl64(ptr addrspace(1) nocapture %arg) {
 ; GFX11-LABEL: mulu24_shl64:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_load_b64 s[0:1], s[4:5], 0x0
-; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v0, 6, v0
+; GFX11-NEXT:    v_and_b32_e32 v0, 6, v0
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX11-NEXT:    v_mul_u32_u24_e32 v0, 7, v0
 ; GFX11-NEXT:    v_lshlrev_b64 v[2:3], 2, v[0:1]
 ; GFX11-NEXT:    s_waitcnt lgkmcnt(0)
@@ -392,8 +393,8 @@ define amdgpu_kernel void @muli24_shl64(ptr addrspace(1) nocapture %arg, ptr add
 ; GFX11-LABEL: muli24_shl64:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_load_b128 s[0:3], s[4:5], 0x0
-; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_and_b32 v2, 0x3ff, v0
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v2
+; GFX11-NEXT:    v_and_b32_e32 v2, 0x3ff, v0
+; GFX11-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_lshlrev_b32 v0, 2, v2
 ; GFX11-NEXT:    v_lshlrev_b32_e32 v2, 3, v2
 ; GFX11-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-NEXT:    global_load_b32 v0, v0, s[2:3]
