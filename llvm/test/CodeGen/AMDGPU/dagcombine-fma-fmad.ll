@@ -363,9 +363,8 @@ define amdgpu_ps float @fmac_sequence_innermost_fmul_multiple_use(float inreg %a
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_fmac_f32_e64 v1, s0, s1
 ; GFX11-NEXT:    v_fma_f32 v2, s5, s4, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_fmac_f32_e32 v1, s5, v2
-; GFX11-NEXT:    v_add_f32_e32 v0, v1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_dual_add_f32 v0, v1, v0 :: v_dual_fmac_f32 v1, s5, v2
 ; GFX11-NEXT:    ; return to shader part epilog
   %t0 = fmul fast float %a, %b
   %t1 = fmul fast float %c, %d

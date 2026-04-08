@@ -6134,14 +6134,12 @@ define float @fract_pat_minimum(float %x, ptr addrspace(1) %iptr) #0 {
 ; GFX11:       ; %bb.0: ; %entry
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_floor_f32_e32 v3, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_sub_f32_e32 v4, v0, v3
-; GFX11-NEXT:    v_min_f32_e32 v5, 0x3f7fffff, v4
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_4) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_dual_min_f32 v5, 0x3f7fffff, v4 :: v_dual_sub_f32 v4, v0, v3
 ; GFX11-NEXT:    global_store_b32 v[1:2], v3, off
 ; GFX11-NEXT:    v_cmp_o_f32_e32 vcc_lo, v4, v4
 ; GFX11-NEXT:    v_cndmask_b32_e32 v4, 0x7fc00000, v5, vcc_lo
 ; GFX11-NEXT:    v_cmp_neq_f32_e64 vcc_lo, 0x7f800000, |v0|
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0, v4, vcc_lo
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;

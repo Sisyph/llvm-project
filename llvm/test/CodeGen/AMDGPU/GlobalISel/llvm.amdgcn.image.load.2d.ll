@@ -107,11 +107,10 @@ define amdgpu_ps <4 x float> @load_2d_v4f32_xyzw_tfe(<8 x i32> inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: load_2d_v4f32_xyzw_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v7, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_dual_mov_b32 v8, v7 :: v_dual_mov_b32 v5, v0
-; GFX11-NEXT:    v_mov_b32_e32 v6, v1
+; GFX11-NEXT:    v_dual_mov_b32 v8, v7 :: v_dual_mov_b32 v7, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v0 :: v_dual_mov_b32 v6, v1
 ; GFX11-NEXT:    s_mov_b32 s0, s2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-NEXT:    v_mov_b32_e32 v9, v7
 ; GFX11-NEXT:    v_mov_b32_e32 v10, v7
 ; GFX11-NEXT:    v_mov_b32_e32 v11, v7
@@ -215,11 +214,10 @@ define amdgpu_ps <4 x float> @load_2d_v4f32_xyzw_tfe_lwe(<8 x i32> inreg %rsrc, 
 ;
 ; GFX11-LABEL: load_2d_v4f32_xyzw_tfe_lwe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v7, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_dual_mov_b32 v8, v7 :: v_dual_mov_b32 v5, v0
-; GFX11-NEXT:    v_mov_b32_e32 v6, v1
+; GFX11-NEXT:    v_dual_mov_b32 v8, v7 :: v_dual_mov_b32 v7, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v0 :: v_dual_mov_b32 v6, v1
 ; GFX11-NEXT:    s_mov_b32 s0, s2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-NEXT:    v_mov_b32_e32 v9, v7
 ; GFX11-NEXT:    v_mov_b32_e32 v10, v7
 ; GFX11-NEXT:    v_mov_b32_e32 v11, v7

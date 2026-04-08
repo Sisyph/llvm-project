@@ -7434,11 +7434,10 @@ define <2 x bfloat> @buffer_fat_ptr_agent_atomic_fmax_ret_v2bf16__offset__amdgpu
 ; GFX11-FAKE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-FAKE16-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_mov_b32_e32 v6, v0
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_2)
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v1, 0xffff0000, v6
 ; GFX11-FAKE16-NEXT:    s_waitcnt_vscnt null, 0x0
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v0, 16, v6
-; GFX11-FAKE16-NEXT:    v_max_f32_e32 v1, v1, v3
+; GFX11-FAKE16-NEXT:    v_dual_max_f32 v1, v1, v3 :: v_dual_lshlrev_b32 v0, 16, v6
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_3)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v7, v1, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v9, 0x400000, v1
@@ -7893,8 +7892,7 @@ define void @buffer_fat_ptr_agent_atomic_fmax_noret_v2bf16__offset__amdgpu_no_fi
 ; GFX11-TRUE16:       ; %bb.0:
 ; GFX11-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_dual_mov_b32 v1, s16 :: v_dual_and_b32 v2, 0xffff0000, v0
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v3, 16, v0
-; GFX11-TRUE16-NEXT:    v_mov_b32_e32 v4, s16
+; GFX11-TRUE16-NEXT:    v_dual_mov_b32 v4, s16 :: v_dual_lshlrev_b32 v3, 16, v0
 ; GFX11-TRUE16-NEXT:    s_mov_b32 s4, 0
 ; GFX11-TRUE16-NEXT:    buffer_load_b32 v1, v1, s[0:3], 0 offen offset:1024
 ; GFX11-TRUE16-NEXT:    s_set_inst_prefetch_distance 0x1
@@ -7941,8 +7939,7 @@ define void @buffer_fat_ptr_agent_atomic_fmax_noret_v2bf16__offset__amdgpu_no_fi
 ; GFX11-FAKE16:       ; %bb.0:
 ; GFX11-FAKE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_dual_mov_b32 v1, s16 :: v_dual_lshlrev_b32 v2, 16, v0
-; GFX11-FAKE16-NEXT:    v_and_b32_e32 v3, 0xffff0000, v0
-; GFX11-FAKE16-NEXT:    v_mov_b32_e32 v4, s16
+; GFX11-FAKE16-NEXT:    v_dual_mov_b32 v4, s16 :: v_dual_and_b32 v3, 0xffff0000, v0
 ; GFX11-FAKE16-NEXT:    s_mov_b32 s5, 0
 ; GFX11-FAKE16-NEXT:    buffer_load_b32 v1, v1, s[0:3], 0 offen offset:1024
 ; GFX11-FAKE16-NEXT:    s_set_inst_prefetch_distance 0x1

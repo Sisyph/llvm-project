@@ -5,9 +5,7 @@ define amdgpu_gfx [13 x i32] @issue130120() {
 ; CHECK-LABEL: issue130120:
 ; CHECK:       ; %bb.0: ; %bb
 ; CHECK-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; CHECK-NEXT:    v_mov_b32_e32 v0, 0
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; CHECK-NEXT:    v_mov_b32_e32 v1, v0
+; CHECK-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; CHECK-NEXT:    s_movk_i32 s1, 0xf4
 ; CHECK-NEXT:    s_movk_i32 s2, 0xf8
 ; CHECK-NEXT:    s_movk_i32 s3, 0xfc

@@ -597,12 +597,12 @@ define amdgpu_cs_chain_preserve void @amdgpu_cs_chain_preserve_realign_stack(i32
 ; GISEL-GFX11-NEXT:    s_mov_b32 s6, 3
 ; GISEL-GFX11-NEXT:    s_mov_b32 s5, 2
 ; GISEL-GFX11-NEXT:    s_mov_b32 s4, 1
-; GISEL-GFX11-NEXT:    v_lshlrev_b32_e32 v0, 4, v8
-; GISEL-GFX11-NEXT:    v_mov_b32_e32 v1, s4
+; GISEL-GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GISEL-GFX11-NEXT:    v_dual_mov_b32 v1, s4 :: v_dual_lshlrev_b32 v0, 4, v8
 ; GISEL-GFX11-NEXT:    s_add_i32 s33, s32, 31
 ; GISEL-GFX11-NEXT:    v_dual_mov_b32 v2, s5 :: v_dual_mov_b32 v3, s6
 ; GISEL-GFX11-NEXT:    s_and_not1_b32 s33, s33, 31
-; GISEL-GFX11-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
+; GISEL-GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instid1(SALU_CYCLE_1)
 ; GISEL-GFX11-NEXT:    v_dual_mov_b32 v4, s7 :: v_dual_add_nc_u32 v5, s33, v0
 ; GISEL-GFX11-NEXT:    scratch_store_b32 off, v16, s33 ; 4-byte Folded Spill
 ; GISEL-GFX11-NEXT:    s_mov_b32 s3, s0

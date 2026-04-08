@@ -2809,9 +2809,7 @@ define float @test_vector_reduce_fmin_v16float(<16 x float> %v) {
 ; GFX11-GISEL-NEXT:    v_dual_min_f32 v1, v2, v3 :: v_dual_min_f32 v2, v4, v5
 ; GFX11-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-GISEL-NEXT:    v_dual_min_f32 v3, v6, v7 :: v_dual_min_f32 v0, v0, v1
-; GFX11-GISEL-NEXT:    v_min_f32_e32 v1, v2, v3
-; GFX11-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-GISEL-NEXT:    v_min_f32_e32 v0, v0, v1
+; GFX11-GISEL-NEXT:    v_dual_min_f32 v0, v0, v1 :: v_dual_min_f32 v1, v2, v3
 ; GFX11-GISEL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX1170-SDAG-LABEL: test_vector_reduce_fmin_v16float:
@@ -2854,9 +2852,7 @@ define float @test_vector_reduce_fmin_v16float(<16 x float> %v) {
 ; GFX1170-GISEL-NEXT:    v_dual_min_num_f32 v1, v2, v3 :: v_dual_min_num_f32 v2, v4, v5
 ; GFX1170-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX1170-GISEL-NEXT:    v_dual_min_num_f32 v3, v6, v7 :: v_dual_min_num_f32 v0, v0, v1
-; GFX1170-GISEL-NEXT:    v_min_num_f32_e32 v1, v2, v3
-; GFX1170-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX1170-GISEL-NEXT:    v_min_num_f32_e32 v0, v0, v1
+; GFX1170-GISEL-NEXT:    v_dual_min_num_f32 v0, v0, v1 :: v_dual_min_num_f32 v1, v2, v3
 ; GFX1170-GISEL-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-SDAG-LABEL: test_vector_reduce_fmin_v16float:

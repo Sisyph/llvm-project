@@ -51,8 +51,7 @@ define void @main(<19 x i32> %arg) {
 ; GFX11-LABEL: main:
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_mov_b32_e32 v1, 0
-; GFX11-NEXT:    v_mov_b32_e32 v2, v1
+; GFX11-NEXT:    v_dual_mov_b32 v2, v1 :: v_dual_mov_b32 v1, 0
 ; GFX11-NEXT:    v_cmp_eq_u16_e32 vcc_lo, 0, v0.l
 ; GFX11-NEXT:    s_mov_b32 s0, 0
 ; GFX11-NEXT:    s_mov_b32 s1, s0

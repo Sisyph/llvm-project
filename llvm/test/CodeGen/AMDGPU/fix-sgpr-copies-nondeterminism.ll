@@ -13,12 +13,11 @@ define amdgpu_gs void @f(i32 inreg %arg, i32 %arg1, i32 %arg2) {
 ; CHECK-NEXT:  .LBB0_2:
 ; CHECK-NEXT:    v_dual_mov_b32 v1, 0 :: v_dual_mov_b32 v2, 1
 ; CHECK-NEXT:  .LBB0_3: ; %bb4
-; CHECK-NEXT:    v_mov_b32_e32 v3, 0
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; CHECK-NEXT:    v_mov_b32_e32 v4, v3
+; CHECK-NEXT:    v_dual_mov_b32 v4, v3 :: v_dual_mov_b32 v3, 0
 ; CHECK-NEXT:    s_mov_b32 s1, s0
 ; CHECK-NEXT:    s_mov_b32 s2, s0
 ; CHECK-NEXT:    s_mov_b32 s3, s0
+; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; CHECK-NEXT:    v_mov_b32_e32 v5, v3
 ; CHECK-NEXT:    buffer_store_b128 v[2:5], v3, s[0:3], 0 idxen
 ; CHECK-NEXT:    v_mov_b32_e32 v2, v3

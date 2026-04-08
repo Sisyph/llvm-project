@@ -904,10 +904,8 @@ define amdgpu_kernel void @select_v2f16(
 ; GFX11-FAKE16-NEXT:    v_lshrrev_b32_e32 v7, 16, v3
 ; GFX11-FAKE16-NEXT:    v_cndmask_b32_e32 v0, v0, v3, vcc_lo
 ; GFX11-FAKE16-NEXT:    v_cmp_lt_f16_e32 vcc_lo, v6, v5
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_4)
-; GFX11-FAKE16-NEXT:    v_and_b32_e32 v0, 0xffff, v0
-; GFX11-FAKE16-NEXT:    v_cndmask_b32_e32 v1, v4, v7, vcc_lo
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-FAKE16-NEXT:    v_dual_cndmask_b32 v1, v4, v7 :: v_dual_and_b32 v0, 0xffff, v0
 ; GFX11-FAKE16-NEXT:    v_lshl_or_b32 v0, v1, 16, v0
 ; GFX11-FAKE16-NEXT:    buffer_store_b32 v0, off, s[0:3], 0
 ; GFX11-FAKE16-NEXT:    s_endpgm

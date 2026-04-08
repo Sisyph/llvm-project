@@ -777,10 +777,10 @@ define amdgpu_kernel void @test_vscnt_global_stores(ptr addrspace(1) %buf) #0 {
 ; GFX11-EXPAND-LABEL: test_vscnt_global_stores:
 ; GFX11-EXPAND:       ; %bb.0: ; %entry
 ; GFX11-EXPAND-NEXT:    s_load_b64 s[0:1], s[4:5], 0x24
-; GFX11-EXPAND-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
-; GFX11-EXPAND-NEXT:    v_dual_mov_b32 v1, 1 :: v_dual_mov_b32 v2, 2
+; GFX11-EXPAND-NEXT:    v_dual_mov_b32 v1, 1 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-EXPAND-NEXT:    v_dual_mov_b32 v2, 2 :: v_dual_mov_b32 v3, 3
 ; GFX11-EXPAND-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-EXPAND-NEXT:    v_dual_mov_b32 v3, 3 :: v_dual_lshlrev_b32 v0, 2, v0
+; GFX11-EXPAND-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
 ; GFX11-EXPAND-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-EXPAND-NEXT:    s_clause 0x2
 ; GFX11-EXPAND-NEXT:    global_store_b32 v0, v1, s[0:1]
@@ -792,10 +792,10 @@ define amdgpu_kernel void @test_vscnt_global_stores(ptr addrspace(1) %buf) #0 {
 ; GFX11-NOEXPAND-LABEL: test_vscnt_global_stores:
 ; GFX11-NOEXPAND:       ; %bb.0: ; %entry
 ; GFX11-NOEXPAND-NEXT:    s_load_b64 s[0:1], s[4:5], 0x24
-; GFX11-NOEXPAND-NEXT:    v_and_b32_e32 v0, 0x3ff, v0
-; GFX11-NOEXPAND-NEXT:    v_dual_mov_b32 v1, 1 :: v_dual_mov_b32 v2, 2
+; GFX11-NOEXPAND-NEXT:    v_dual_mov_b32 v1, 1 :: v_dual_and_b32 v0, 0x3ff, v0
+; GFX11-NOEXPAND-NEXT:    v_dual_mov_b32 v2, 2 :: v_dual_mov_b32 v3, 3
 ; GFX11-NOEXPAND-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NOEXPAND-NEXT:    v_dual_mov_b32 v3, 3 :: v_dual_lshlrev_b32 v0, 2, v0
+; GFX11-NOEXPAND-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
 ; GFX11-NOEXPAND-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-NOEXPAND-NEXT:    s_clause 0x2
 ; GFX11-NOEXPAND-NEXT:    global_store_b32 v0, v1, s[0:1]

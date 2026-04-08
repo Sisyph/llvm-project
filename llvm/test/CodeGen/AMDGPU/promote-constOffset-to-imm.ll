@@ -823,19 +823,17 @@ define hidden amdgpu_kernel void @clmem_read(ptr addrspace(1)  %buffer) {
 ; GFX11-NEXT:    ; implicit-def: $sgpr15
 ; GFX11-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-NEXT:    s_swappc_b64 s[30:31], s[0:1]
-; GFX11-NEXT:    v_lshlrev_b32_e32 v1, 17, v0
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
-; GFX11-NEXT:    v_and_b32_e32 v0, 0xff, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0
+; GFX11-NEXT:    v_dual_mov_b32 v2, 0 :: v_dual_lshlrev_b32 v1, 17, v0
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0 :: v_dual_and_b32 v0, 0xff, v0
 ; GFX11-NEXT:    v_mov_b32_e32 v7, 0x7f
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_and_b32_e32 v6, 0xfe000000, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_lshl_or_b32 v0, v0, 3, v6
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_co_u32 v0, s0, s34, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_add_co_ci_u32_e64 v1, null, s35, 0, s0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_co_u32 v0, vcc_lo, 0x2800, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_co_ci_u32_e64 v1, null, 0, v1, vcc_lo
 ; GFX11-NEXT:  .LBB1_1: ; %for.cond.preheader
 ; GFX11-NEXT:    ; =>This Loop Header: Depth=1

@@ -2531,12 +2531,11 @@ define <2 x i24> @v_fshl_v2i24(<2 x i24> %lhs, <2 x i24> %rhs, <2 x i24> %amt) {
 ; GFX11-NEXT:    v_add_nc_u32_e32 v7, 0xffffffe8, v5
 ; GFX11-NEXT:    v_cndmask_b32_e32 v5, v5, v7, vcc_lo
 ; GFX11-NEXT:    v_cmp_le_u32_e32 vcc_lo, 24, v4
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_2) | instid1(VALU_DEP_2)
-; GFX11-NEXT:    v_add_nc_u32_e32 v7, 0xffffffe8, v5
-; GFX11-NEXT:    v_cndmask_b32_e32 v4, v4, v6, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_dual_cndmask_b32 v4, v4, v6 :: v_dual_add_nc_u32 v7, 0xffffffe8, v5
 ; GFX11-NEXT:    v_cmp_le_u32_e32 vcc_lo, 24, v5
 ; GFX11-NEXT:    v_sub_nc_u32_e32 v6, 23, v4
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_dual_cndmask_b32 v5, v5, v7 :: v_dual_and_b32 v4, 0xffffff, v4
 ; GFX11-NEXT:    v_and_b32_e32 v6, 0xffffff, v6
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_3)
@@ -6261,8 +6260,8 @@ define amdgpu_ps <4 x float> @v_fshl_i128_ssv(i128 inreg %lhs, i128 inreg %rhs, 
 ; GFX11-NEXT:    v_sub_nc_u32_e32 v9, 64, v12
 ; GFX11-NEXT:    s_or_b64 s[8:9], s[4:5], s[8:9]
 ; GFX11-NEXT:    s_lshr_b64 s[6:7], s[6:7], 1
-; GFX11-NEXT:    v_add_nc_u32_e32 v13, 0xffffffc0, v12
-; GFX11-NEXT:    v_cndmask_b32_e32 v6, 0, v6, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3)
+; GFX11-NEXT:    v_dual_cndmask_b32 v6, 0, v6 :: v_dual_add_nc_u32 v13, 0xffffffc0, v12
 ; GFX11-NEXT:    v_sub_nc_u32_e32 v3, 64, v11
 ; GFX11-NEXT:    v_lshlrev_b64 v[1:2], v11, s[2:3]
 ; GFX11-NEXT:    v_lshlrev_b64 v[9:10], v9, s[6:7]
@@ -7786,10 +7785,10 @@ define <2 x i128> @v_fshl_v2i128(<2 x i128> %lhs, <2 x i128> %rhs, <2 x i128> %a
 ; GFX11-NEXT:    v_cmp_gt_u32_e64 s1, 64, v29
 ; GFX11-NEXT:    v_cndmask_b32_e32 v30, 0, v17, vcc_lo
 ; GFX11-NEXT:    v_sub_nc_u32_e32 v21, 64, v19
-; GFX11-NEXT:    v_add_nc_u32_e32 v25, 0xffffffc0, v19
-; GFX11-NEXT:    v_cndmask_b32_e32 v18, 0, v18, vcc_lo
+; GFX11-NEXT:    v_dual_cndmask_b32 v18, 0, v18 :: v_dual_add_nc_u32 v25, 0xffffffc0, v19
 ; GFX11-NEXT:    v_lshlrev_b64 v[23:24], v19, v[2:3]
 ; GFX11-NEXT:    v_lshlrev_b64 v[27:28], v16, v[10:11]
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_lshrrev_b64 v[21:22], v21, v[0:1]
 ; GFX11-NEXT:    v_lshlrev_b64 v[0:1], v25, v[0:1]
 ; GFX11-NEXT:    v_lshrrev_b64 v[25:26], v29, v[8:9]

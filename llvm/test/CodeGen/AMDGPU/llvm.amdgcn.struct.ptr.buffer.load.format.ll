@@ -678,9 +678,8 @@ define amdgpu_cs float @buffer_load_v4i32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v4i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v5, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v2
@@ -741,9 +740,8 @@ define amdgpu_cs float @buffer_load_v4f32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v4f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v5, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v2
@@ -803,9 +801,8 @@ define amdgpu_cs float @buffer_load_v3i32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v3i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v5, v2
 ; GFX11-NEXT:    buffer_load_format_xyz v[2:5], v2, s[0:3], 0 idxen tfe
@@ -864,9 +861,8 @@ define amdgpu_cs float @buffer_load_v3f32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v3f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v5, v2
 ; GFX11-NEXT:    buffer_load_format_xyz v[2:5], v2, s[0:3], 0 idxen tfe
@@ -923,9 +919,8 @@ define amdgpu_cs float @buffer_load_v2i32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v2i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    buffer_load_format_xy v[2:4], v2, s[0:3], 0 idxen tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -981,9 +976,8 @@ define amdgpu_cs float @buffer_load_v2f32_tfe(ptr addrspace(8) inreg %rsrc, ptr 
 ;
 ; GFX11-LABEL: buffer_load_v2f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v2
 ; GFX11-NEXT:    buffer_load_format_xy v[2:4], v2, s[0:3], 0 idxen tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1036,9 +1030,7 @@ define amdgpu_cs float @buffer_load_i32_tfe(ptr addrspace(8) inreg %rsrc, ptr ad
 ;
 ; GFX11-LABEL: buffer_load_i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    buffer_load_format_x v[2:3], v2, s[0:3], 0 idxen tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b32 v[0:1], v2, off
@@ -1090,9 +1082,7 @@ define amdgpu_cs float @buffer_load_f32_tfe(ptr addrspace(8) inreg %rsrc, ptr ad
 ;
 ; GFX11-LABEL: buffer_load_f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v2, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v3, v2
+; GFX11-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_mov_b32 v2, 0
 ; GFX11-NEXT:    buffer_load_format_x v[2:3], v2, s[0:3], 0 idxen tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b32 v[0:1], v2, off

@@ -45,9 +45,7 @@ define amdgpu_ps void @raw_buffer_load_i8_tfe(<4 x i32> inreg %rsrc, ptr addrspa
 ;
 ; GFX11-LABEL: raw_buffer_load_i8_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    buffer_load_u8 v[4:5], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b8 v[0:1], v4, off
@@ -117,9 +115,7 @@ define amdgpu_ps void @raw_buffer_load_i16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX11-LABEL: raw_buffer_load_i16_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b16 v[0:1], v4, off
@@ -189,9 +185,7 @@ define amdgpu_ps void @raw_buffer_load_f16_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX11-LABEL: raw_buffer_load_f16_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    buffer_load_u16 v[4:5], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b16 v[0:1], v4, off
@@ -261,9 +255,7 @@ define amdgpu_ps void @raw_buffer_load_i32_tfe(<4 x i32> inreg %rsrc, ptr addrsp
 ;
 ; GFX11-LABEL: raw_buffer_load_i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    buffer_load_b32 v[4:5], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    global_store_b32 v[0:1], v4, off
@@ -352,9 +344,8 @@ define amdgpu_ps void @raw_buffer_load_v2i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v2i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -448,9 +439,8 @@ define amdgpu_ps void @raw_buffer_load_v2f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v2f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    buffer_load_b64 v[4:6], off, s[0:3], 0 tfe
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -548,9 +538,8 @@ define amdgpu_ps void @raw_buffer_load_v3i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v3i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v7, v4
 ; GFX11-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], 0 tfe
@@ -649,9 +638,8 @@ define amdgpu_ps void @raw_buffer_load_v3f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v3f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v7, v4
 ; GFX11-NEXT:    buffer_load_b96 v[4:7], off, s[0:3], 0 tfe
@@ -736,9 +724,8 @@ define amdgpu_ps void @raw_buffer_load_v4i32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v4i32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v7, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v8, v4
@@ -826,9 +813,8 @@ define amdgpu_ps void @raw_buffer_load_v4f32_tfe(<4 x i32> inreg %rsrc, ptr addr
 ;
 ; GFX11-LABEL: raw_buffer_load_v4f32_tfe:
 ; GFX11:       ; %bb.0:
-; GFX11-NEXT:    v_mov_b32_e32 v4, 0
+; GFX11-NEXT:    v_dual_mov_b32 v5, v4 :: v_dual_mov_b32 v4, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_mov_b32_e32 v5, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v6, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v7, v4
 ; GFX11-NEXT:    v_mov_b32_e32 v8, v4

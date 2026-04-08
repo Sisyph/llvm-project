@@ -187,15 +187,16 @@ public:
           // But if the formed VOPD would take multiple cycles to issue, this
           // won't work. Before GFX12 this is disallowed as well.
 
-          const auto Antidependency = [&]() -> bool {
+          const auto SafeAntidependencyOrNone = [&]() -> bool {
             for (const auto &Use : FirstMI->uses())
-              if (Use.isReg() && SecondMI->modifiesRegister(Use.getReg(), TRI))
+              if (Use.isReg() && SecondMI->modifiesRegister(Use.getReg(), TRI)) {
                 AllowSameVGPR = false;
                 if (AMDGPU::isNotGFX12Plus(*ST) || isMulticycleOp(*SecondMI, *ST))
                   return false;
+              }
             return true;
           };
-          if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X && Antidependency() &&
+          if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X && SafeAntidependencyOrNone() &&
               llvm::checkVOPDRegConstraints(*SII, *SecondMI, *FirstMI, VOPD3, AllowSameVGPR)) {
             CI = VOPDCombineInfo(SecondMI, FirstMI, VOPD3);
             return true;

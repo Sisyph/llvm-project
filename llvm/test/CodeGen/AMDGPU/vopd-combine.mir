@@ -812,13 +812,11 @@ body:             |
     ;
     ; PAIR-GFX1100-LABEL: name: vopd_dependent_subreg
     ; PAIR-GFX1100: $vgpr0 = IMPLICIT_DEF
-    ; PAIR-GFX1100-NEXT: $vgpr2 = V_MOV_B32_e32 0, implicit-def $vgpr2_vgpr3, implicit $exec
-    ; PAIR-GFX1100-NEXT: $vgpr5 = V_ADD_F32_e32 killed $vgpr0, killed $vgpr3, implicit $mode, implicit $exec
+    ; PAIR-GFX1100-NEXT: $vgpr5, $vgpr2 = V_DUAL_ADD_F32_e32_X_MOV_B32_e32_gfx11 killed $vgpr0, killed $vgpr3, 0, implicit $mode, implicit $exec, implicit $mode, implicit $exec, implicit-def $vgpr2_vgpr3, implicit $exec
     ;
     ; PAIR-GFX1170-LABEL: name: vopd_dependent_subreg
     ; PAIR-GFX1170: $vgpr0 = IMPLICIT_DEF
-    ; PAIR-GFX1170-NEXT: $vgpr2 = V_MOV_B32_e32 0, implicit-def $vgpr2_vgpr3, implicit $exec
-    ; PAIR-GFX1170-NEXT: $vgpr5 = V_ADD_F32_e32 killed $vgpr0, killed $vgpr3, implicit $mode, implicit $exec
+    ; PAIR-GFX1170-NEXT: $vgpr5, $vgpr2 = V_DUAL_ADD_F32_e32_X_MOV_B32_e32_gfx1170 killed $vgpr0, killed $vgpr3, 0, implicit $mode, implicit $exec, implicit $mode, implicit $exec, implicit-def $vgpr2_vgpr3, implicit $exec
     ;
     ; PAIR-GFX12-LABEL: name: vopd_dependent_subreg
     ; PAIR-GFX12: $vgpr0 = IMPLICIT_DEF

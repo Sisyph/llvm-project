@@ -17,14 +17,12 @@ define amdgpu_kernel void @simulated_trap_pseudo_expand(i64 %offset, i1 %should_
 ; CHECK-NEXT:    s_clause 0x1
 ; CHECK-NEXT:    s_load_b64 s[0:1], s[4:5], 0x0
 ; CHECK-NEXT:    s_load_b64 s[2:3], s[4:5], 0x10
-; CHECK-NEXT:    v_mov_b32_e32 v0, 0
-; CHECK-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(SALU_CYCLE_1)
-; CHECK-NEXT:    v_mov_b32_e32 v1, v0
+; CHECK-NEXT:    v_dual_mov_b32 v1, v0 :: v_dual_mov_b32 v0, 0
 ; CHECK-NEXT:    s_waitcnt lgkmcnt(0)
 ; CHECK-NEXT:    s_lshl_b64 s[0:1], s[0:1], 3
+; CHECK-NEXT:    s_delay_alu instid0(SALU_CYCLE_1) | instskip(SKIP_1) | instid1(SALU_CYCLE_1)
 ; CHECK-NEXT:    s_add_u32 s0, s2, s0
 ; CHECK-NEXT:    s_addc_u32 s1, s3, s1
-; CHECK-NEXT:    s_delay_alu instid0(SALU_CYCLE_1)
 ; CHECK-NEXT:    v_dual_mov_b32 v3, s1 :: v_dual_mov_b32 v2, s0
 ; CHECK-NEXT:    flat_store_b64 v[2:3], v[0:1]
 ; CHECK-NEXT:    s_endpgm

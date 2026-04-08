@@ -5400,8 +5400,7 @@ define amdgpu_ps <4 x float> @ssubsat_i128_sv(i128 inreg %lhs, i128 %rhs) {
 ; GFX11-NEXT:    v_cndmask_b32_e32 v8, v9, v8, vcc_lo
 ; GFX11-NEXT:    v_cmp_eq_u64_e32 vcc_lo, 0, v[2:3]
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v2, 31, v7
-; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x80000000, v2
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc_lo
+; GFX11-NEXT:    v_dual_cndmask_b32 v0, v1, v0 :: v_dual_add_nc_u32 v3, 0x80000000, v2
 ; GFX11-NEXT:    v_xor_b32_e32 v0, v0, v8
 ; GFX11-NEXT:    v_cmp_ne_u16_e32 vcc_lo, 0, v0
 ; GFX11-NEXT:    v_cndmask_b32_e32 v0, v4, v2, vcc_lo
@@ -5831,8 +5830,7 @@ define <2 x i128> @v_ssubsat_v2i128(<2 x i128> %lhs, <2 x i128> %rhs) {
 ; GFX11-NEXT:    v_cndmask_b32_e32 v1, v3, v2, vcc_lo
 ; GFX11-NEXT:    v_cmp_eq_u64_e32 vcc_lo, 0, v[14:15]
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v3, 31, v19
-; GFX11-NEXT:    v_add_nc_u32_e32 v7, 0x80000000, v6
-; GFX11-NEXT:    v_cndmask_b32_e32 v2, v5, v4, vcc_lo
+; GFX11-NEXT:    v_dual_cndmask_b32 v2, v5, v4 :: v_dual_add_nc_u32 v7, 0x80000000, v6
 ; GFX11-NEXT:    v_cmp_ne_u16_e32 vcc_lo, 0, v0
 ; GFX11-NEXT:    v_add_nc_u32_e32 v4, 0x80000000, v3
 ; GFX11-NEXT:    v_xor_b32_e32 v2, v2, v1

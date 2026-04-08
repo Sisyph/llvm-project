@@ -5467,9 +5467,8 @@ define amdgpu_kernel void @fma_shuffle_v2bf16(ptr addrspace(1) nocapture readonl
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v3, 0xffff0000, v3
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v10, 0xffff0000, v5
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v4, 0xffff0000, v4
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v8, 16, v2
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-TRUE16-NEXT:    v_fmac_f32_e32 v1, v12, v4
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-TRUE16-NEXT:    v_dual_fmac_f32 v1, v12, v4 :: v_dual_lshlrev_b32 v8, 16, v2
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v15, v1, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v16, 0x400000, v1
 ; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_3) | instid1(VALU_DEP_1)
@@ -5564,9 +5563,8 @@ define amdgpu_kernel void @fma_shuffle_v2bf16(ptr addrspace(1) nocapture readonl
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v3, 0xffff0000, v3
 ; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v10, 16, v5
 ; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v4, 16, v4
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v8, 16, v2
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-FAKE16-NEXT:    v_fmac_f32_e32 v1, v12, v4
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-FAKE16-NEXT:    v_dual_fmac_f32 v1, v12, v4 :: v_dual_lshlrev_b32 v8, 16, v2
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v15, v1, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v16, 0x400000, v1
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_3) | instid1(VALU_DEP_1)

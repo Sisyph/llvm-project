@@ -83,17 +83,16 @@ main_body:
 define amdgpu_ps <4 x float> @load_2darraymsaa_tfe(<8 x i32> inreg %rsrc, ptr addrspace(1) inreg %out, i32 %s, i32 %t, i32 %slice, i32 %fragid) {
 ; GFX11-LABEL: load_2darraymsaa_tfe:
 ; GFX11:       ; %bb.0: ; %main_body
-; GFX11-NEXT:    v_mov_b32_e32 v9, 0 ; encoding: [0x80,0x02,0x12,0x7e]
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) ; encoding: [0x01,0x00,0x87,0xbf]
-; GFX11-NEXT:    v_mov_b32_e32 v10, v9 ; encoding: [0x09,0x03,0x14,0x7e]
+; GFX11-NEXT:    v_dual_mov_b32 v10, v9 :: v_dual_mov_b32 v9, 0 ; encoding: [0x09,0x01,0x10,0xca,0x80,0x00,0x08,0x0a]
 ; GFX11-NEXT:    v_dual_mov_b32 v8, v3 :: v_dual_mov_b32 v7, v2 ; encoding: [0x03,0x01,0x10,0xca,0x02,0x01,0x06,0x08]
 ; GFX11-NEXT:    v_dual_mov_b32 v6, v1 :: v_dual_mov_b32 v5, v0 ; encoding: [0x01,0x01,0x10,0xca,0x00,0x01,0x04,0x06]
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_3) ; encoding: [0xc3,0x01,0x87,0xbf]
 ; GFX11-NEXT:    v_mov_b32_e32 v11, v9 ; encoding: [0x09,0x03,0x16,0x7e]
 ; GFX11-NEXT:    v_mov_b32_e32 v12, v9 ; encoding: [0x09,0x03,0x18,0x7e]
 ; GFX11-NEXT:    v_mov_b32_e32 v13, v9 ; encoding: [0x09,0x03,0x1a,0x7e]
 ; GFX11-NEXT:    v_dual_mov_b32 v0, v9 :: v_dual_mov_b32 v1, v10 ; encoding: [0x09,0x01,0x10,0xca,0x0a,0x01,0x00,0x00]
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_3) ; encoding: [0x93,0x01,0x87,0xbf]
 ; GFX11-NEXT:    v_dual_mov_b32 v2, v11 :: v_dual_mov_b32 v3, v12 ; encoding: [0x0b,0x01,0x10,0xca,0x0c,0x01,0x02,0x02]
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) ; encoding: [0x03,0x00,0x87,0xbf]
 ; GFX11-NEXT:    v_mov_b32_e32 v4, v13 ; encoding: [0x0d,0x03,0x08,0x7e]
 ; GFX11-NEXT:    image_msaa_load v[0:4], v[5:8], s[0:7] dmask:0x8 dim:SQ_RSRC_IMG_2D_MSAA_ARRAY unorm tfe ; encoding: [0x9c,0x08,0x60,0xf0,0x05,0x00,0x20,0x00]
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) ; encoding: [0xf7,0x03,0x89,0xbf]

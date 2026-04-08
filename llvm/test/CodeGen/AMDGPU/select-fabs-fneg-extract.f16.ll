@@ -1580,9 +1580,8 @@ define half @add_select_negfabs_neg_f16(i32 %c, half %x, half %y, half %z) {
 ; GFX11-SAFE-FAKE16:       ; %bb.0:
 ; GFX11-SAFE-FAKE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-SAFE-FAKE16-NEXT:    v_cmp_eq_u32_e32 vcc_lo, 0, v0
-; GFX11-SAFE-FAKE16-NEXT:    v_and_b32_e32 v1, 0x7fff, v1
-; GFX11-SAFE-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-SAFE-FAKE16-NEXT:    v_cndmask_b32_e32 v0, v1, v2, vcc_lo
+; GFX11-SAFE-FAKE16-NEXT:    v_dual_cndmask_b32 v0, v1, v2 :: v_dual_and_b32 v1, 0x7fff, v1
+; GFX11-SAFE-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-SAFE-FAKE16-NEXT:    v_sub_f16_e32 v0, v3, v0
 ; GFX11-SAFE-FAKE16-NEXT:    s_setpc_b64 s[30:31]
   %cmp = icmp eq i32 %c, 0

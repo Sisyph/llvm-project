@@ -6753,23 +6753,24 @@ define <2 x bfloat> @local_atomic_fadd_ret_v2bf16(ptr addrspace(3) %ptr, <2 x bf
 ; GFX11-TRUE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-TRUE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_mov_b32_e32 v4, v2
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v4
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v2, 16, v4
-; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v3 :: v_dual_add_f32 v2, v2, v1
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_3)
+; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v3 :: v_dual_lshlrev_b32 v2, 16, v4
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v2, v2, v1
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v6, v2, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v8, 0x400000, v2
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v7, v7, v5, 0x7fff
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v6, v6, v2, 0x7fff
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v2, v6, v8, vcc_lo
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v5, v5
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v5, v7, v9, vcc_lo
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX11-TRUE16-NEXT:    v_mov_b16_e32 v5.l, v2.h
 ; GFX11-TRUE16-NEXT:    s_waitcnt_vscnt null, 0x0
 ; GFX11-TRUE16-NEXT:    ds_cmpstore_rtn_b32 v2, v0, v5, v4
@@ -6798,10 +6799,9 @@ define <2 x bfloat> @local_atomic_fadd_ret_v2bf16(ptr addrspace(3) %ptr, <2 x bf
 ; GFX11-FAKE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-FAKE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_mov_b32_e32 v4, v2
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v4
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v2, 16, v4
-; GFX11-FAKE16-NEXT:    v_add_f32_e32 v5, v5, v1
+; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_lshlrev_b32 v2, 16, v4
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_3)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5
@@ -7112,23 +7112,24 @@ define <2 x bfloat> @local_atomic_fadd_ret_v2bf16__offset(ptr addrspace(3) %ptr,
 ; GFX11-TRUE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-TRUE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_mov_b32_e32 v4, v2
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_1)
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v4
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v2, 16, v4
-; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v3 :: v_dual_add_f32 v2, v2, v1
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_3)
+; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v3 :: v_dual_lshlrev_b32 v2, 16, v4
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v2, v2, v1
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v6, v2, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v8, 0x400000, v2
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v7, v7, v5, 0x7fff
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v6, v6, v2, 0x7fff
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v2, v6, v8, vcc_lo
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v5, v5
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v5, v7, v9, vcc_lo
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX11-TRUE16-NEXT:    v_mov_b16_e32 v5.l, v2.h
 ; GFX11-TRUE16-NEXT:    s_waitcnt_vscnt null, 0x0
 ; GFX11-TRUE16-NEXT:    ds_cmpstore_rtn_b32 v2, v0, v5, v4 offset:65532
@@ -7157,10 +7158,9 @@ define <2 x bfloat> @local_atomic_fadd_ret_v2bf16__offset(ptr addrspace(3) %ptr,
 ; GFX11-FAKE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-FAKE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_mov_b32_e32 v4, v2
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v4
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v2, 16, v4
-; GFX11-FAKE16-NEXT:    v_add_f32_e32 v5, v5, v1
+; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_lshlrev_b32 v2, 16, v4
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_3)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5
@@ -7473,11 +7473,11 @@ define void @local_atomic_fadd_noret_v2bf16(ptr addrspace(3) %ptr, <2 x bfloat> 
 ; GFX11-TRUE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-TRUE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v3
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v4, 16, v3
 ; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v2 :: v_dual_add_f32 v4, v4, v1
+; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v2 :: v_dual_lshlrev_b32 v4, 16, v3
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v4, v4, v1
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v6, v4, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v8, 0x400000, v4
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v4, v4
@@ -7517,11 +7517,11 @@ define void @local_atomic_fadd_noret_v2bf16(ptr addrspace(3) %ptr, <2 x bfloat> 
 ; GFX11-FAKE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-FAKE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v3
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v4, 16, v3
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_add_f32 v4, v4, v2
+; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_lshlrev_b32 v4, 16, v3
+; GFX11-FAKE16-NEXT:    v_add_f32_e32 v4, v4, v2
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v6, v4, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v8, 0x400000, v4
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5
@@ -7817,11 +7817,11 @@ define void @local_atomic_fadd_noret_v2bf16__ofset(ptr addrspace(3) %ptr, <2 x b
 ; GFX11-TRUE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-TRUE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v3
-; GFX11-TRUE16-NEXT:    v_lshlrev_b32_e32 v4, 16, v3
 ; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v2 :: v_dual_add_f32 v4, v4, v1
+; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, v5, v2 :: v_dual_lshlrev_b32 v4, 16, v3
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v4, v4, v1
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v6, v4, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v8, 0x400000, v4
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v4, v4
@@ -7861,11 +7861,11 @@ define void @local_atomic_fadd_noret_v2bf16__ofset(ptr addrspace(3) %ptr, <2 x b
 ; GFX11-FAKE16-NEXT:    ; =>This Inner Loop Header: Depth=1
 ; GFX11-FAKE16-NEXT:    s_waitcnt lgkmcnt(0)
 ; GFX11-FAKE16-NEXT:    v_and_b32_e32 v5, 0xffff0000, v3
-; GFX11-FAKE16-NEXT:    v_lshlrev_b32_e32 v4, 16, v3
 ; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_add_f32 v4, v4, v2
+; GFX11-FAKE16-NEXT:    v_dual_add_f32 v5, v5, v1 :: v_dual_lshlrev_b32 v4, 16, v3
+; GFX11-FAKE16-NEXT:    v_add_f32_e32 v4, v4, v2
+; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v7, v5, 16, 1
-; GFX11-FAKE16-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-FAKE16-NEXT:    v_bfe_u32 v6, v4, 16, 1
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v8, 0x400000, v4
 ; GFX11-FAKE16-NEXT:    v_or_b32_e32 v9, 0x400000, v5

@@ -149,8 +149,7 @@ define amdgpu_ps void @test_scratch_load_i8_zext_to_d16_lo_v(ptr addrspace(5) %i
 ;
 ; GFX11-LABEL: test_scratch_load_i8_zext_to_d16_lo_v:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_add_nc_u32_e32 v0, 1, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_add_nc_u32 v0, 1, v0
 ; GFX11-NEXT:    scratch_load_d16_u8 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    flat_store_b32 v[1:2], v3
@@ -188,8 +187,7 @@ define amdgpu_ps void @test_scratch_load_i8_sext_to_d16_lo_v(ptr addrspace(5) %i
 ;
 ; GFX11-LABEL: test_scratch_load_i8_sext_to_d16_lo_v:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_add_nc_u32_e32 v0, 1, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_add_nc_u32 v0, 1, v0
 ; GFX11-NEXT:    scratch_load_d16_i8 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    flat_store_b32 v[1:2], v3
@@ -227,8 +225,7 @@ define amdgpu_ps void @test_scratch_load_i16_to_d16_lo_v(ptr addrspace(5) %in, p
 ;
 ; GFX11-LABEL: test_scratch_load_i16_to_d16_lo_v:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_add_nc_u32_e32 v0, 2, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_add_nc_u32 v0, 2, v0
 ; GFX11-NEXT:    scratch_load_d16_b16 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    flat_store_b32 v[1:2], v3
@@ -1042,9 +1039,8 @@ define amdgpu_ps void @test_scratch_load_i8_zext_to_d16_lo_svs(ptr addrspace(5) 
 ;
 ; GFX11-LABEL: test_scratch_load_i8_zext_to_d16_lo_svs:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_lshlrev_b32 v0, 2, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add3_u32 v0, s0, v0, 1
 ; GFX11-NEXT:    scratch_load_d16_u8 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1086,9 +1082,8 @@ define amdgpu_ps void @test_scratch_load_i8_sext_to_d16_lo_svs(ptr addrspace(5) 
 ;
 ; GFX11-LABEL: test_scratch_load_i8_sext_to_d16_lo_svs:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_lshlrev_b32 v0, 2, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add3_u32 v0, s0, v0, 1
 ; GFX11-NEXT:    scratch_load_d16_i8 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
@@ -1130,9 +1125,8 @@ define amdgpu_ps void @test_scratch_load_i16_to_d16_lo_svs(ptr addrspace(5) inre
 ;
 ; GFX11-LABEL: test_scratch_load_i16_to_d16_lo_svs:
 ; GFX11:       ; %bb.0: ; %bb
-; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
-; GFX11-NEXT:    v_mov_b32_e32 v3, 0xffff0000
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
+; GFX11-NEXT:    v_dual_mov_b32 v3, 0xffff0000 :: v_dual_lshlrev_b32 v0, 2, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_add3_u32 v0, s0, v0, 2
 ; GFX11-NEXT:    scratch_load_d16_b16 v3, v0, off
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
