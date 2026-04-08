@@ -780,8 +780,9 @@ define amdgpu_kernel void @ds_read_diff_base_interleaving(
 ; GFX1250:       ; %bb.0: ; %bb
 ; GFX1250-NEXT:    s_setreg_imm32_b32 hwreg(HW_REG_WAVE_MODE, 25, 1), 1 ; msbs: dst=0 src0=0 src1=0 src2=0
 ; GFX1250-NEXT:    s_load_b128 s[0:3], s[4:5], 0x8 nv
-; GFX1250-NEXT:    v_dual_lshrrev_b32 v1, 6, v0 :: v_dual_lshlrev_b32 v0, 2, v0
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX1250-NEXT:    v_lshrrev_b32_e32 v1, 6, v0
+; GFX1250-NEXT:    v_lshlrev_b32_e32 v0, 2, v0
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX1250-NEXT:    v_and_b32_e32 v1, 0x3ff0, v1
 ; GFX1250-NEXT:    v_and_b32_e32 v0, 0xffc, v0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0

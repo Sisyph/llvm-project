@@ -166,10 +166,17 @@ public:
           if(dataDependency(*FirstMI, *SecondMI))
             return false;
 
-          if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y &&
-              llvm::checkVOPDRegConstraints(*SII, *FirstMI, *SecondMI, VOPD3, VOPD3)) {
-            CI = VOPDCombineInfo(FirstMI, SecondMI, VOPD3);
-            return true;
+          bool IsAntiDep = dataDependency(*SecondMI, *FirstMI);
+          bool AllowSameVGPR = VOPD3 & !IsAntiDep;
+
+          if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y) {
+            if ((!IsAntiDep ||
+                 (IsAntiDep && isAntidependencyAllowed(*FirstMI))) &&
+                llvm::checkVOPDRegConstraints(*SII, *FirstMI, *SecondMI, VOPD3,
+                                              AllowSameVGPR)) {
+              CI = VOPDCombineInfo(FirstMI, SecondMI, VOPD3);
+              return true;
+            }
           }
           // If SecondMI writes a source of FirstMI (write after read in the
           // original program order), we could form a legal VOPD as SecondMI ::
@@ -178,8 +185,6 @@ public:
           // won't work. Before GFX12 this is disallowed as well.
 
           if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X) {
-            bool IsAntiDep = dataDependency(*SecondMI, *FirstMI);
-            bool AllowSameVGPR = VOPD3 & !IsAntiDep;
             if (IsAntiDep && !isAntidependencyAllowed(*SecondMI))
               return false;
             if (checkVOPDRegConstraints(*SII, *SecondMI, *FirstMI, VOPD3, AllowSameVGPR)) {

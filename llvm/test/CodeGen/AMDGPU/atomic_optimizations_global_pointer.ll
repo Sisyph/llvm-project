@@ -7873,7 +7873,8 @@ define amdgpu_kernel void @sub_i64_varying(ptr addrspace(1) %out, ptr addrspace(
 ; GFX1132_DPP-NEXT:    v_subrev_co_ci_u32_e64 v11, null, s9, v13, vcc_lo
 ; GFX1132_DPP-NEXT:    v_mov_b32_e32 v8, v10
 ; GFX1132_DPP-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX1132_DPP-NEXT:    v_dual_mov_b32 v9, v11 :: v_dual_mov_b32 v10, v12
+; GFX1132_DPP-NEXT:    v_mov_b32_e32 v9, v11
+; GFX1132_DPP-NEXT:    v_mov_b32_e32 v10, v12
 ; GFX1132_DPP-NEXT:    v_mov_b32_e32 v11, v13
 ; GFX1132_DPP-NEXT:    buffer_atomic_cmpswap_b64 v[8:11], off, s[4:7], 0 glc
 ; GFX1132_DPP-NEXT:    s_waitcnt vmcnt(0)

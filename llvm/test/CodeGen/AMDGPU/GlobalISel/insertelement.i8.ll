@@ -297,14 +297,16 @@ define amdgpu_ps void @insertelement_s_v2i8_v_s(ptr addrspace(4) inreg %ptr, i8 
 ; GFX11-NEXT:    global_load_u16 v1, v1, s[2:3]
 ; GFX11-NEXT:    s_waitcnt vmcnt(0)
 ; GFX11-NEXT:    v_lshrrev_b32_e32 v2, 8, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_cndmask_b32_e32 v2, v2, v0, vcc_lo
 ; GFX11-NEXT:    v_cmp_eq_u32_e64 vcc_lo, s4, 0
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, v1, v0 :: v_dual_and_b32 v1, 0xff, v2
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, v1, v0, vcc_lo
+; GFX11-NEXT:    v_and_b32_e32 v1, 0xff, v2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_and_b32_e32 v2, 0xff, v0
+; GFX11-NEXT:    v_mov_b32_e32 v0, 0
 ; GFX11-NEXT:    v_lshlrev_b16 v3, 8, v1
-; GFX11-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, 0
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-NEXT:    v_or_b32_e32 v2, v2, v3
 ; GFX11-NEXT:    global_store_b16 v[0:1], v2, off
@@ -2005,10 +2007,10 @@ define amdgpu_ps void @insertelement_s_v8i8_s_v(ptr addrspace(4) inreg %ptr, i8 
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_lshlrev_b32_e64 v2, v1, 0xff
 ; GFX11-NEXT:    v_lshlrev_b32_e64 v3, v1, s2
-; GFX11-NEXT:    v_dual_cndmask_b32 v5, s0, v0 :: v_dual_mov_b32 v0, s0
+; GFX11-NEXT:    v_cndmask_b32_e32 v5, s0, v0, vcc_lo
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_2) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_not_b32_e32 v2, v2
-; GFX11-NEXT:    v_mov_b32_e32 v1, s1
+; GFX11-NEXT:    v_dual_mov_b32 v0, s0 :: v_dual_mov_b32 v1, s1
 ; GFX11-NEXT:    v_cmp_eq_u32_e64 s0, 0, v4
 ; GFX11-NEXT:    v_and_or_b32 v5, v5, v2, v3
 ; GFX11-NEXT:    v_dual_mov_b32 v2, 0 :: v_dual_mov_b32 v3, 0

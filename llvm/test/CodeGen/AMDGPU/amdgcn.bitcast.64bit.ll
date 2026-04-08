@@ -16495,28 +16495,30 @@ define <8 x i8> @bitcast_v4bf16_to_v8i8(<4 x bfloat> %a, i32 %b) {
 ; GFX11-TRUE16-NEXT:    v_mov_b16_e32 v3.l, 0
 ; GFX11-TRUE16-NEXT:    v_mov_b16_e32 v3.h, v0.l
 ; GFX11-TRUE16-NEXT:    v_and_b32_e32 v0, 0xffff0000, v1
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_3)
-; GFX11-TRUE16-NEXT:    v_dual_add_f32 v5, 0x40c00000, v2 :: v_dual_add_f32 v2, 0x40c00000, v3
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v5, 0x40c00000, v2
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v2, 0x40c00000, v3
 ; GFX11-TRUE16-NEXT:    v_mov_b16_e32 v3.h, v1.l
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_add_f32_e32 v0, 0x40c00000, v0
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v1, v5, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v6, 0x400000, v5
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v4, v2, 16, 1
-; GFX11-TRUE16-NEXT:    v_add_f32_e32 v3, 0x40c00000, v3
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v7, 0x400000, v2
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
-; GFX11-TRUE16-NEXT:    v_bfe_u32 v8, v0, 16, 1
+; GFX11-TRUE16-NEXT:    v_add3_u32 v1, v1, v5, 0x7fff
+; GFX11-TRUE16-NEXT:    v_add_f32_e32 v3, 0x40c00000, v3
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v4, v4, v2, 0x7fff
+; GFX11-TRUE16-NEXT:    v_bfe_u32 v8, v0, 16, 1
+; GFX11-TRUE16-NEXT:    v_or_b32_e32 v10, 0x400000, v0
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_4)
 ; GFX11-TRUE16-NEXT:    v_bfe_u32 v9, v3, 16, 1
 ; GFX11-TRUE16-NEXT:    v_or_b32_e32 v11, 0x400000, v3
-; GFX11-TRUE16-NEXT:    v_add3_u32 v1, v1, v5, 0x7fff
-; GFX11-TRUE16-NEXT:    v_or_b32_e32 v10, 0x400000, v0
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v2, v4, v7, vcc_lo
-; GFX11-TRUE16-NEXT:    v_add3_u32 v9, v9, v3, 0x7fff
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v3, v3
 ; GFX11-TRUE16-NEXT:    v_add3_u32 v12, v8, v0, 0x7fff
-; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_3)
+; GFX11-TRUE16-NEXT:    v_add3_u32 v9, v9, v3, 0x7fff
+; GFX11-TRUE16-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v4, v9, v11, vcc_lo
 ; GFX11-TRUE16-NEXT:    v_cmp_u_f32_e32 vcc_lo, v5, v5
 ; GFX11-TRUE16-NEXT:    v_cndmask_b32_e32 v8, v1, v6, vcc_lo

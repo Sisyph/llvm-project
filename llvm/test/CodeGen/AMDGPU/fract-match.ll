@@ -6441,7 +6441,8 @@ define <2 x float> @core_fract_pat_minimum_v2f32(<2 x float> %x) #0 {
 ; GFX11-NEXT:    v_min_f32_e32 v1, 0x3f7fffff, v0
 ; GFX11-NEXT:    v_cmp_o_f32_e32 vcc_lo, v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, 0x7fc00000, v1 :: v_dual_mov_b32 v1, 0x7fc00000
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, 0x7fc00000, v1, vcc_lo
+; GFX11-NEXT:    v_mov_b32_e32 v1, 0x7fc00000
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX12-LABEL: core_fract_pat_minimum_v2f32:

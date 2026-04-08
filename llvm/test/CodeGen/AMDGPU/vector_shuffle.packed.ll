@@ -1984,7 +1984,8 @@ define <6 x half> @shuffle_v6f16_452367(ptr addrspace(1) %arg0, ptr addrspace(1)
 ; GFX11-LABEL: shuffle_v6f16_452367:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v4, v3 :: v_dual_mov_b32 v3, v2
+; GFX11-NEXT:    v_mov_b32_e32 v4, v3
+; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    global_load_b96 v[0:2], v[0:1], off
 ; GFX11-NEXT:    global_load_b32 v3, v[3:4], off
 ; GFX11-NEXT:    s_waitcnt vmcnt(1)
@@ -5178,7 +5179,8 @@ define <6 x bfloat> @shuffle_v6bf16_452367(ptr addrspace(1) %arg0, ptr addrspace
 ; GFX11-LABEL: shuffle_v6bf16_452367:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX11-NEXT:    v_dual_mov_b32 v4, v3 :: v_dual_mov_b32 v3, v2
+; GFX11-NEXT:    v_mov_b32_e32 v4, v3
+; GFX11-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX11-NEXT:    global_load_b96 v[0:2], v[0:1], off
 ; GFX11-NEXT:    global_load_b32 v3, v[3:4], off
 ; GFX11-NEXT:    s_waitcnt vmcnt(1)

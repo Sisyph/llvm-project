@@ -43,7 +43,7 @@ bool llvm::dataDependency(const MachineInstr &FirstMI,
                           const MachineInstr &SecondMI) {
   const GCNSubtarget &ST = FirstMI.getMF()->getSubtarget<GCNSubtarget>();
   const SIRegisterInfo *TRI = dyn_cast<SIRegisterInfo>(ST.getRegisterInfo());
-  for (const auto &Use : SecondMI.uses()) {
+  for (const auto &Use : SecondMI.all_uses()) {
     if (Use.isReg() && FirstMI.modifiesRegister(Use.getReg(), TRI))
       return true;
   }
@@ -229,13 +229,16 @@ static bool shouldScheduleVOPDAdjacent(const TargetInstrInfo &TII,
 
     if(dataDependency(*FirstMI, SecondMI))
       return false;
+    bool IsAntiDep = dataDependency(SecondMI, *FirstMI);
+    bool AllowSameVGPR = VOPD3 & !IsAntiDep;
 
-    if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y && checkVOPDRegConstraints(STII, *FirstMI, SecondMI, VOPD3, VOPD3))
+    if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y) {
+      if ((!IsAntiDep || (IsAntiDep && isAntidependencyAllowed(*FirstMI))) &&
+          checkVOPDRegConstraints(STII, *FirstMI, SecondMI, VOPD3, VOPD3))
         return true;
+    }
 
     if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X) {
-      bool IsAntiDep = dataDependency(SecondMI, *FirstMI);
-      bool AllowSameVGPR = VOPD3 & !IsAntiDep;
       if (IsAntiDep && !isAntidependencyAllowed(SecondMI))
         return false;
       return checkVOPDRegConstraints(STII, SecondMI, *FirstMI, VOPD3, AllowSameVGPR);
