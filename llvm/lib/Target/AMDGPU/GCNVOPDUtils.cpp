@@ -39,7 +39,8 @@ static bool isMulticycleOp(const MachineInstr &MI, const GCNSubtarget &ST) {
   return AMDGPU::isDPMACCInstruction(Opc);
 }
 
-bool dataDependency(const MachineInstr &FirstMI, const MachineInstr &SecondMI) {
+bool llvm::dataDependency(const MachineInstr &FirstMI,
+                          const MachineInstr &SecondMI) {
   const GCNSubtarget &ST = FirstMI.getMF()->getSubtarget<GCNSubtarget>();
   const SIRegisterInfo *TRI = dyn_cast<SIRegisterInfo>(ST.getRegisterInfo());
   for (const auto &Use : SecondMI.uses()) {
@@ -49,7 +50,7 @@ bool dataDependency(const MachineInstr &FirstMI, const MachineInstr &SecondMI) {
   return false;
 }
 
-bool isAntidependencyAllowed(const MachineInstr &OpX) {
+bool llvm::isAntidependencyAllowed(const MachineInstr &OpX) {
   const GCNSubtarget &ST = OpX.getMF()->getSubtarget<GCNSubtarget>();
   if (AMDGPU::isNotGFX12Plus(ST))
     return false;

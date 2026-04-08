@@ -154,9 +154,11 @@ define amdgpu_ps i32 @s_uitofp_i1_to_bf16(i1 inreg %num) {
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v1, v1, v0
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, v1, v2 :: v_dual_add_nc_u32 v1, 0x7fff, v1
+; GFX11-NEXT:    v_add_nc_u32_e32 v1, 0x7fff, v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, v1, v2, vcc_lo
 ; GFX11-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_readfirstlane_b32 s0, v0
 ; GFX11-NEXT:    ; return to shader part epilog
 ;
@@ -171,9 +173,11 @@ define amdgpu_ps i32 @s_uitofp_i1_to_bf16(i1 inreg %num) {
 ; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_add_nc_u32_e32 v1, v1, v0
-; GFX12-NEXT:    v_dual_cndmask_b32 v0, v1, v2 :: v_dual_add_nc_u32 v1, 0x7fff, v1
+; GFX12-NEXT:    v_add_nc_u32_e32 v1, 0x7fff, v1
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    v_cndmask_b32_e32 v0, v1, v2, vcc_lo
 ; GFX12-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX12-NEXT:    v_readfirstlane_b32 s0, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-NEXT:    ; return to shader part epilog
@@ -770,31 +774,29 @@ define amdgpu_ps <3 x i32> @s_uitofp_v3i1_to_v3bf16(<3 x i1> inreg %num) {
 ; GFX11-NEXT:    v_or_b32_e32 v6, 0x400000, v1
 ; GFX11-NEXT:    v_bfe_u32 v3, v0, 16, 1
 ; GFX11-NEXT:    v_or_b32_e32 v7, 0x400000, v0
-; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX11-NEXT:    v_add_nc_u32_e32 v4, v4, v1
 ; GFX11-NEXT:    v_bfe_u32 v5, v2, 16, 1
 ; GFX11-NEXT:    v_or_b32_e32 v8, 0x400000, v2
 ; GFX11-NEXT:    v_add_nc_u32_e32 v3, v3, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, v3, v7, vcc_lo
-; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
-; GFX11-NEXT:    v_add_nc_u32_e32 v4, v4, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX11-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX11-NEXT:    v_add_nc_u32_e32 v4, 0x7fff, v4
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX11-NEXT:    v_readfirstlane_b32 s1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
+; GFX11-NEXT:    v_dual_cndmask_b32 v0, v3, v7 :: v_dual_add_nc_u32 v5, v5, v2
+; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
+; GFX11-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
 ; GFX11-NEXT:    v_cndmask_b32_e32 v1, v4, v6, vcc_lo
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
-; GFX11-NEXT:    v_add_nc_u32_e32 v5, v5, v2
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_readfirstlane_b32 s1, v0
 ; GFX11-NEXT:    v_lshrrev_b32_e32 v1, 16, v1
-; GFX11-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
+; GFX11-NEXT:    v_cndmask_b32_e32 v2, v5, v8, vcc_lo
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_readfirstlane_b32 s0, v1
-; GFX11-NEXT:    v_cndmask_b32_e32 v2, v5, v8, vcc_lo
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_lshrrev_b32_e32 v2, 16, v2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_readfirstlane_b32 s2, v2
 ; GFX11-NEXT:    ; return to shader part epilog
 ;
@@ -817,33 +819,31 @@ define amdgpu_ps <3 x i32> @s_uitofp_v3i1_to_v3bf16(<3 x i1> inreg %num) {
 ; GFX12-NEXT:    v_or_b32_e32 v6, 0x400000, v1
 ; GFX12-NEXT:    v_bfe_u32 v3, v0, 16, 1
 ; GFX12-NEXT:    v_or_b32_e32 v7, 0x400000, v0
-; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX12-NEXT:    v_add_nc_u32_e32 v4, v4, v1
 ; GFX12-NEXT:    v_bfe_u32 v5, v2, 16, 1
 ; GFX12-NEXT:    v_or_b32_e32 v8, 0x400000, v2
 ; GFX12-NEXT:    v_add_nc_u32_e32 v3, v3, v0
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, v3, v7, vcc_lo
-; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
-; GFX12-NEXT:    v_add_nc_u32_e32 v4, v4, v1
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
+; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX12-NEXT:    v_add_nc_u32_e32 v4, 0x7fff, v4
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_readfirstlane_b32 s1, v0
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
+; GFX12-NEXT:    v_dual_cndmask_b32 v0, v3, v7 :: v_dual_add_nc_u32 v5, v5, v2
+; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX12-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
+; GFX12-NEXT:    v_lshrrev_b32_e32 v0, 16, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
 ; GFX12-NEXT:    v_cndmask_b32_e32 v1, v4, v6, vcc_lo
 ; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
-; GFX12-NEXT:    v_add_nc_u32_e32 v5, v5, v2
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX12-NEXT:    v_readfirstlane_b32 s1, v0
 ; GFX12-NEXT:    v_lshrrev_b32_e32 v1, 16, v1
-; GFX12-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_readfirstlane_b32 s0, v1
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
 ; GFX12-NEXT:    v_cndmask_b32_e32 v2, v5, v8, vcc_lo
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX12-NEXT:    v_readfirstlane_b32 s0, v1
 ; GFX12-NEXT:    v_lshrrev_b32_e32 v2, 16, v2
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX12-NEXT:    v_readfirstlane_b32 s2, v2
 ; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-NEXT:    ; return to shader part epilog
@@ -1478,9 +1478,11 @@ define amdgpu_ps i32 @s_sitofp_i1_to_bf16(i1 inreg %num) {
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v1, v1, v0
-; GFX11-NEXT:    v_dual_cndmask_b32 v0, v1, v2 :: v_dual_add_nc_u32 v1, 0x7fff, v1
+; GFX11-NEXT:    v_add_nc_u32_e32 v1, 0x7fff, v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, v1, v2, vcc_lo
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX11-NEXT:    v_readfirstlane_b32 s0, v0
 ; GFX11-NEXT:    ; return to shader part epilog
 ;
@@ -1495,9 +1497,11 @@ define amdgpu_ps i32 @s_sitofp_i1_to_bf16(i1 inreg %num) {
 ; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_add_nc_u32_e32 v1, v1, v0
-; GFX12-NEXT:    v_dual_cndmask_b32 v0, v1, v2 :: v_dual_add_nc_u32 v1, 0x7fff, v1
+; GFX12-NEXT:    v_add_nc_u32_e32 v1, 0x7fff, v1
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    v_cndmask_b32_e32 v0, v1, v2, vcc_lo
 ; GFX12-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX12-NEXT:    v_readfirstlane_b32 s0, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-NEXT:    ; return to shader part epilog
@@ -1729,23 +1733,25 @@ define amdgpu_ps <2 x i32> @s_sitofp_v2i1_to_v2bf16(<2 x i1> inreg %num) {
 ; GFX11-NEXT:    v_cndmask_b32_e64 v1, 0, -1.0, s0
 ; GFX11-NEXT:    v_bfe_u32 v3, v0, 16, 1
 ; GFX11-NEXT:    v_or_b32_e32 v5, 0x400000, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_2) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_bfe_u32 v2, v1, 16, 1
 ; GFX11-NEXT:    v_or_b32_e32 v4, 0x400000, v1
-; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
-; GFX11-NEXT:    v_add_nc_u32_e32 v2, v2, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_2) | instid1(VALU_DEP_3)
-; GFX11-NEXT:    v_dual_cndmask_b32 v1, v2, v4 :: v_dual_add_nc_u32 v2, 0x7fff, v2
-; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX11-NEXT:    v_add_nc_u32_e32 v3, v3, v0
+; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_add_nc_u32_e32 v2, v2, v1
+; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-NEXT:    v_add_nc_u32_e32 v2, 0x7fff, v2
+; GFX11-NEXT:    v_cndmask_b32_e32 v1, v2, v4, vcc_lo
+; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_cndmask_b32_e32 v0, v3, v5, vcc_lo
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v1, 16, v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
-; GFX11-NEXT:    v_readfirstlane_b32 s0, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_cndmask_b32_e32 v0, v3, v5, vcc_lo
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX11-NEXT:    v_readfirstlane_b32 s0, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX11-NEXT:    v_readfirstlane_b32 s1, v0
 ; GFX11-NEXT:    ; return to shader part epilog
 ;
@@ -1764,21 +1770,23 @@ define amdgpu_ps <2 x i32> @s_sitofp_v2i1_to_v2bf16(<2 x i1> inreg %num) {
 ; GFX12-NEXT:    v_or_b32_e32 v5, 0x400000, v0
 ; GFX12-NEXT:    v_bfe_u32 v2, v1, 16, 1
 ; GFX12-NEXT:    v_or_b32_e32 v4, 0x400000, v1
-; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_add_nc_u32_e32 v2, v2, v1
-; GFX12-NEXT:    v_dual_cndmask_b32 v1, v2, v4 :: v_dual_add_nc_u32 v2, 0x7fff, v2
-; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX12-NEXT:    v_add_nc_u32_e32 v3, v3, v0
+; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX12-NEXT:    v_add_nc_u32_e32 v2, v2, v1
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_ashrrev_i32_e32 v1, 16, v1
 ; GFX12-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_readfirstlane_b32 s0, v1
+; GFX12-NEXT:    v_add_nc_u32_e32 v2, 0x7fff, v2
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(SKIP_3) | instid1(VALU_DEP_3)
+; GFX12-NEXT:    v_cndmask_b32_e32 v1, v2, v4, vcc_lo
+; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
 ; GFX12-NEXT:    v_cndmask_b32_e32 v0, v3, v5, vcc_lo
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX12-NEXT:    v_ashrrev_i32_e32 v1, 16, v1
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX12-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
+; GFX12-NEXT:    v_readfirstlane_b32 s0, v1
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX12-NEXT:    v_readfirstlane_b32 s1, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-NEXT:    ; return to shader part epilog
@@ -2092,25 +2100,26 @@ define amdgpu_ps <3 x i32> @s_sitofp_v3i1_to_v3bf16(<3 x i1> inreg %num) {
 ; GFX11-NEXT:    v_or_b32_e32 v6, 0x400000, v2
 ; GFX11-NEXT:    v_bfe_u32 v3, v0, 16, 1
 ; GFX11-NEXT:    v_or_b32_e32 v7, 0x400000, v0
-; GFX11-NEXT:    v_add_nc_u32_e32 v5, v5, v2
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX11-NEXT:    v_add_nc_u32_e32 v5, v5, v2
 ; GFX11-NEXT:    v_bfe_u32 v4, v1, 16, 1
-; GFX11-NEXT:    v_add_nc_u32_e32 v3, v3, v0
 ; GFX11-NEXT:    v_or_b32_e32 v8, 0x400000, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX11-NEXT:    v_add_nc_u32_e32 v3, v3, v0
+; GFX11-NEXT:    v_add_nc_u32_e32 v4, v4, v1
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
+; GFX11-NEXT:    v_add_nc_u32_e32 v4, 0x7fff, v4
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_cndmask_b32_e32 v0, v3, v7, vcc_lo
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
-; GFX11-NEXT:    v_add_nc_u32_e32 v4, v4, v1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
-; GFX11-NEXT:    v_add_nc_u32_e32 v4, 0x7fff, v4
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX11-NEXT:    v_readfirstlane_b32 s1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_1) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_cndmask_b32_e32 v1, v4, v8, vcc_lo
 ; GFX11-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_readfirstlane_b32 s1, v0
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_2)
 ; GFX11-NEXT:    v_ashrrev_i32_e32 v1, 16, v1
 ; GFX11-NEXT:    v_cndmask_b32_e32 v2, v5, v6, vcc_lo
 ; GFX11-NEXT:    v_readfirstlane_b32 s0, v1
@@ -2137,32 +2146,33 @@ define amdgpu_ps <3 x i32> @s_sitofp_v3i1_to_v3bf16(<3 x i1> inreg %num) {
 ; GFX12-NEXT:    v_or_b32_e32 v6, 0x400000, v2
 ; GFX12-NEXT:    v_bfe_u32 v3, v0, 16, 1
 ; GFX12-NEXT:    v_or_b32_e32 v7, 0x400000, v0
-; GFX12-NEXT:    v_add_nc_u32_e32 v5, v5, v2
 ; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v0, v0
+; GFX12-NEXT:    v_add_nc_u32_e32 v5, v5, v2
 ; GFX12-NEXT:    v_bfe_u32 v4, v1, 16, 1
-; GFX12-NEXT:    v_add_nc_u32_e32 v3, v3, v0
 ; GFX12-NEXT:    v_or_b32_e32 v8, 0x400000, v1
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_4)
 ; GFX12-NEXT:    v_add_nc_u32_e32 v5, 0x7fff, v5
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX12-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
-; GFX12-NEXT:    v_cndmask_b32_e32 v0, v3, v7, vcc_lo
-; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX12-NEXT:    v_add_nc_u32_e32 v3, v3, v0
 ; GFX12-NEXT:    v_add_nc_u32_e32 v4, v4, v1
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
+; GFX12-NEXT:    v_add_nc_u32_e32 v3, 0x7fff, v3
 ; GFX12-NEXT:    v_add_nc_u32_e32 v4, 0x7fff, v4
 ; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_2)
-; GFX12-NEXT:    v_readfirstlane_b32 s1, v0
+; GFX12-NEXT:    v_cndmask_b32_e32 v0, v3, v7, vcc_lo
+; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v1, v1
+; GFX12-NEXT:    v_ashrrev_i32_e32 v0, 16, v0
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
 ; GFX12-NEXT:    v_cndmask_b32_e32 v1, v4, v8, vcc_lo
 ; GFX12-NEXT:    v_cmp_u_f32_e32 vcc_lo, v2, v2
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_2) | instid1(VALU_DEP_2)
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX12-NEXT:    v_readfirstlane_b32 s1, v0
 ; GFX12-NEXT:    v_ashrrev_i32_e32 v1, 16, v1
 ; GFX12-NEXT:    s_wait_alu depctr_va_vcc(0)
 ; GFX12-NEXT:    v_cndmask_b32_e32 v2, v5, v6, vcc_lo
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX12-NEXT:    v_readfirstlane_b32 s0, v1
-; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
 ; GFX12-NEXT:    v_ashrrev_i32_e32 v2, 16, v2
+; GFX12-NEXT:    s_delay_alu instid0(VALU_DEP_1)
 ; GFX12-NEXT:    v_readfirstlane_b32 s2, v2
 ; GFX12-NEXT:    s_wait_alu depctr_va_sdst(0)
 ; GFX12-NEXT:    ; return to shader part epilog

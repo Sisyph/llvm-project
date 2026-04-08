@@ -1819,8 +1819,8 @@ define i24 @v_fshr_i24(i24 %lhs, i24 %rhs, i24 %amt) {
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX11-NEXT:    v_cvt_f32_ubyte0_e32 v3, 24
 ; GFX11-NEXT:    v_and_b32_e32 v2, 0xffffff, v2
-; GFX11-NEXT:    v_and_b32_e32 v1, 0xffffff, v1
 ; GFX11-NEXT:    v_lshlrev_b32_e32 v0, 1, v0
+; GFX11-NEXT:    v_and_b32_e32 v1, 0xffffff, v1
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_2) | instid1(VALU_DEP_1)
 ; GFX11-NEXT:    v_rcp_iflag_f32_e32 v3, v3
 ; GFX11-NEXT:    s_waitcnt_depctr depctr_va_vdst(0)
@@ -5946,50 +5946,51 @@ define i128 @v_fshr_i128(i128 %lhs, i128 %rhs, i128 %amt) {
 ; GFX11-NEXT:    v_bfi_b32 v18, v8, 0, 0x7f
 ; GFX11-NEXT:    v_lshrrev_b32_e32 v9, 31, v1
 ; GFX11-NEXT:    v_lshlrev_b64 v[0:1], 1, v[0:1]
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_and_b32_e32 v19, 0x7f, v8
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_sub_nc_u32_e32 v10, 64, v18
 ; GFX11-NEXT:    v_or_b32_e32 v2, v2, v9
 ; GFX11-NEXT:    v_cmp_gt_u32_e32 vcc_lo, 64, v18
-; GFX11-NEXT:    v_and_b32_e32 v19, 0x7f, v8
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4)
+; GFX11-NEXT:    v_sub_nc_u32_e32 v16, 64, v19
 ; GFX11-NEXT:    v_lshlrev_b64 v[12:13], v18, v[0:1]
 ; GFX11-NEXT:    v_lshrrev_b64 v[8:9], v10, v[0:1]
 ; GFX11-NEXT:    v_lshlrev_b64 v[10:11], v18, v[2:3]
+; GFX11-NEXT:    v_cmp_gt_u32_e64 s1, 64, v19
+; GFX11-NEXT:    v_lshlrev_b64 v[16:17], v16, v[6:7]
 ; GFX11-NEXT:    v_cmp_eq_u32_e64 s0, 0, v18
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_cmp_eq_u32_e64 s2, 0, v19
 ; GFX11-NEXT:    v_cndmask_b32_e32 v12, 0, v12, vcc_lo
 ; GFX11-NEXT:    v_or_b32_e32 v11, v9, v11
 ; GFX11-NEXT:    v_add_nc_u32_e32 v14, 0xffffffc0, v18
 ; GFX11-NEXT:    v_or_b32_e32 v8, v8, v10
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(NEXT) | instid1(VALU_DEP_1)
-; GFX11-NEXT:    v_lshlrev_b64 v[0:1], v14, v[0:1]
-; GFX11-NEXT:    v_cndmask_b32_e32 v20, v0, v8, vcc_lo
-; GFX11-NEXT:    v_sub_nc_u32_e32 v16, 64, v19
 ; GFX11-NEXT:    v_add_nc_u32_e32 v10, 0xffffffc0, v19
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_3) | instskip(SKIP_1) | instid1(VALU_DEP_2)
+; GFX11-NEXT:    v_lshlrev_b64 v[0:1], v14, v[0:1]
 ; GFX11-NEXT:    v_lshrrev_b64 v[14:15], v19, v[4:5]
-; GFX11-NEXT:    v_cmp_gt_u32_e64 s1, 64, v19
-; GFX11-NEXT:    v_cndmask_b32_e32 v11, v1, v11, vcc_lo
-; GFX11-NEXT:    v_lshlrev_b64 v[16:17], v16, v[6:7]
+; GFX11-NEXT:    v_cndmask_b32_e32 v20, v0, v8, vcc_lo
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
 ; GFX11-NEXT:    v_lshrrev_b64 v[8:9], v10, v[6:7]
-; GFX11-NEXT:    v_cmp_eq_u32_e64 s2, 0, v19
-; GFX11-NEXT:    v_cndmask_b32_e64 v2, v20, v2, s0
-; GFX11-NEXT:    v_cndmask_b32_e64 v3, v11, v3, s0
 ; GFX11-NEXT:    v_or_b32_e32 v0, v14, v16
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_2) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_or_b32_e32 v10, v15, v17
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_2) | instskip(SKIP_1) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_cndmask_b32_e32 v11, v1, v11, vcc_lo
+; GFX11-NEXT:    v_cndmask_b32_e64 v2, v20, v2, s0
 ; GFX11-NEXT:    v_cndmask_b32_e64 v8, v8, v0, s1
 ; GFX11-NEXT:    v_lshrrev_b64 v[0:1], v19, v[6:7]
 ; GFX11-NEXT:    v_cndmask_b32_e64 v6, v9, v10, s1
 ; GFX11-NEXT:    v_cndmask_b32_e32 v7, 0, v13, vcc_lo
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_3)
+; GFX11-NEXT:    v_cndmask_b32_e64 v3, v11, v3, s0
 ; GFX11-NEXT:    v_cndmask_b32_e64 v4, v8, v4, s2
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(SKIP_2) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_cndmask_b32_e64 v5, v6, v5, s2
 ; GFX11-NEXT:    v_cndmask_b32_e64 v6, 0, v0, s1
 ; GFX11-NEXT:    v_cndmask_b32_e64 v8, 0, v1, s1
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
 ; GFX11-NEXT:    v_or_b32_e32 v0, v12, v4
-; GFX11-NEXT:    v_or_b32_e32 v1, v7, v5
 ; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4) | instskip(NEXT) | instid1(VALU_DEP_4)
+; GFX11-NEXT:    v_or_b32_e32 v1, v7, v5
 ; GFX11-NEXT:    v_or_b32_e32 v2, v2, v6
+; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_4)
 ; GFX11-NEXT:    v_or_b32_e32 v3, v3, v8
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
   %result = call i128 @llvm.fshr.i128(i128 %lhs, i128 %rhs, i128 %amt)

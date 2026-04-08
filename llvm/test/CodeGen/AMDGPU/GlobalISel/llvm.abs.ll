@@ -261,11 +261,12 @@ define i64 @abs_vgpr_i64(i64 %arg) {
 ; GFX1250:       ; %bb.0:
 ; GFX1250-NEXT:    s_wait_loadcnt_dscnt 0x0
 ; GFX1250-NEXT:    s_wait_kmcnt 0x0
-; GFX1250-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_ashrrev_i32 v2, 31, v1
+; GFX1250-NEXT:    v_ashrrev_i32_e32 v2, 31, v1
 ; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX1250-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX1250-NEXT:    v_add_nc_u64_e32 v[0:1], v[0:1], v[2:3]
+; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_2)
 ; GFX1250-NEXT:    v_xor_b32_e32 v0, v0, v2
-; GFX1250-NEXT:    s_delay_alu instid0(VALU_DEP_2)
 ; GFX1250-NEXT:    v_xor_b32_e32 v1, v1, v2
 ; GFX1250-NEXT:    s_set_pc_i64 s[30:31]
   %res = call i64 @llvm.abs.i64(i64 %arg, i1 false)

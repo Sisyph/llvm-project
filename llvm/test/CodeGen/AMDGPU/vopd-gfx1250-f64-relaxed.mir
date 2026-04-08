@@ -171,13 +171,15 @@ body:             |
     ; GFX1250-LABEL: name: test_non_dpmacc_f32_allows_vopd_gfx1250
     ; GFX1250: liveins: $vgpr0, $vgpr1, $vgpr2_vgpr3
     ; GFX1250-NEXT: {{  $}}
-    ; GFX1250-NEXT: $vgpr3, $vgpr2 = V_DUAL_ADD_F32_e32_X_MUL_F32_e32_gfx1250 killed $vgpr2, $vgpr2, killed $vgpr0, killed $vgpr1, implicit $mode, implicit $exec, implicit $mode, implicit $exec, implicit $mode, implicit $exec
+    ; GFX1250-NEXT: $vgpr2 = V_MUL_F32_e32 killed $vgpr0, killed $vgpr1, implicit $mode, implicit $exec
+    ; GFX1250-NEXT: $vgpr3 = V_ADD_F32_e32 killed $vgpr2, $vgpr2, implicit $mode, implicit $exec
     ; GFX1250-NEXT: S_ENDPGM 0
     ;
     ; GFX1200-LABEL: name: test_non_dpmacc_f32_allows_vopd_gfx1250
     ; GFX1200: liveins: $vgpr0, $vgpr1, $vgpr2_vgpr3
     ; GFX1200-NEXT: {{  $}}
-    ; GFX1200-NEXT: $vgpr3, $vgpr2 = V_DUAL_ADD_F32_e32_X_MUL_F32_e32_gfx12 killed $vgpr2, $vgpr2, killed $vgpr0, killed $vgpr1, implicit $mode, implicit $exec, implicit $mode, implicit $exec, implicit $mode, implicit $exec
+    ; GFX1200-NEXT: $vgpr2 = V_MUL_F32_e32 killed $vgpr0, killed $vgpr1, implicit $mode, implicit $exec
+    ; GFX1200-NEXT: $vgpr3 = V_ADD_F32_e32 killed $vgpr2, $vgpr2, implicit $mode, implicit $exec
     ; GFX1200-NEXT: S_ENDPGM 0
     $vgpr2 = V_MUL_F32_e32 $vgpr0, $vgpr1, implicit $mode, implicit $exec
     $vgpr3 = V_ADD_F32_e32 $vgpr2, $vgpr2, implicit $mode, implicit $exec

@@ -61,8 +61,6 @@ define amdgpu_ps void @group_image_sample(i32 inreg noundef %globalTable, i32 in
 ; GFX11-NEXT:    v_add_f32_e32 v29, s29, v36
 ; GFX11-NEXT:    v_add_f32_e32 v32, s30, v0
 ; GFX11-NEXT:    v_add_f32_e32 v33, s31, v36
-; GFX11-NEXT:    v_add_f32_e32 v37, s34, v0
-; GFX11-NEXT:    v_add_f32_e32 v38, s35, v36
 ; GFX11-NEXT:    s_clause 0x7
 ; GFX11-NEXT:    image_sample v[4:7], v[4:5], s[0:7], s[8:11] dmask:0xf dim:SQ_RSRC_IMG_2D
 ; GFX11-NEXT:    image_sample v[8:11], v[8:9], s[0:7], s[8:11] dmask:0xf dim:SQ_RSRC_IMG_2D
@@ -72,6 +70,8 @@ define amdgpu_ps void @group_image_sample(i32 inreg noundef %globalTable, i32 in
 ; GFX11-NEXT:    image_sample v[24:27], v[24:25], s[0:7], s[8:11] dmask:0xf dim:SQ_RSRC_IMG_2D
 ; GFX11-NEXT:    image_sample v[28:31], v[28:29], s[0:7], s[8:11] dmask:0xf dim:SQ_RSRC_IMG_2D
 ; GFX11-NEXT:    image_sample v[32:35], v[32:33], s[0:7], s[8:11] dmask:0xf dim:SQ_RSRC_IMG_2D
+; GFX11-NEXT:    v_add_f32_e32 v37, s34, v0
+; GFX11-NEXT:    v_add_f32_e32 v38, s35, v36
 ; GFX11-NEXT:    v_add_f32_e32 v40, s36, v0
 ; GFX11-NEXT:    v_add_f32_e32 v41, s37, v36
 ; GFX11-NEXT:    v_add_f32_e32 v44, s38, v0

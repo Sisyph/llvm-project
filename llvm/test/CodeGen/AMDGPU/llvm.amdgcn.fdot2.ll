@@ -726,7 +726,8 @@ define float @v_fdot2_neg_a_dual(<2 x half> %a, <2 x half> %b, float %c, <2 x ha
 ; GFX11-LABEL: v_fdot2_neg_a_dual:
 ; GFX11:  ; %bb.0:
 ; GFX11:    v_dot2_f32_f16 v0, v0, v1, v2 neg_lo:[1,0,0] neg_hi:[1,0,0]
-; GFX11:    v_dual_add_f32 v0, v0, v5 :: v_dual_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_add_f32_e32 v0, v0, v5
 ;
 ; GFX1170-LABEL: v_fdot2_neg_a_dual:
 ; GFX1170:  ; %bb.0:
@@ -869,7 +870,8 @@ define float @v_fdot2_neg_b_dual(<2 x half> %a, <2 x half> %b, float %c, <2 x ha
 ; GFX11-LABEL: v_fdot2_neg_b_dual:
 ; GFX11:  ; %bb.0:
 ; GFX11:    v_dot2_f32_f16 v0, v0, v1, v2 neg_lo:[0,1,0] neg_hi:[0,1,0]
-; GFX11:    v_dual_add_f32 v0, v0, v5 :: v_dual_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_add_f32_e32 v0, v0, v5
 ;
 ; GFX1170-LABEL: v_fdot2_neg_b_dual:
 ; GFX1170:  ; %bb.0:
@@ -1012,7 +1014,8 @@ define float @v_fdot2_neg_c_dual(<2 x half> %a, <2 x half> %b, float %c, <2 x ha
 ; GFX11-LABEL: v_fdot2_neg_c_dual:
 ; GFX11:  ; %bb.0:
 ; GFX11:    v_dot2_f32_f16 v0, v0, v1, v2 neg_lo:[0,0,1]
-; GFX11:    v_dual_add_f32 v0, v0, v5 :: v_dual_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_add_f32_e32 v0, v0, v5
 ;
 ; GFX1170-LABEL: v_fdot2_neg_c_dual:
 ; GFX1170:  ; %bb.0:
@@ -1054,7 +1057,8 @@ define float @v_fdot2_abs_c_dual(<2 x half> %a, <2 x half> %b, float %c, <2 x ha
 ; GFX11-LABEL: v_fdot2_abs_c_dual:
 ; GFX11:  ; %bb.0:
 ; GFX11:    v_dot2_f32_f16 v0, v0, v1, v2 neg_hi:[0,0,1]
-; GFX11:    v_dual_add_f32 v0, v0, v5 :: v_dual_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_dot2acc_f32_f16 v5, v3, v4
+; GFX11:    v_add_f32_e32 v0, v0, v5
 ;
 ; GFX1170-LABEL: v_fdot2_abs_c_dual:
 ; GFX1170:  ; %bb.0:

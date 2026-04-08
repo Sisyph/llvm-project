@@ -57,12 +57,11 @@ define amdgpu_kernel void @f2(i32 %arg, i32 %arg1, i32 %arg2, i1 %arg3, i32 %arg
 ; GFX11:       ; %bb.0: ; %bb
 ; GFX11-NEXT:    s_mov_b64 s[18:19], s[4:5]
 ; GFX11-NEXT:    v_mov_b32_e32 v31, v0
-; GFX11-NEXT:    s_delay_alu instid0(VALU_DEP_1)
-; GFX11-NEXT:    v_and_b32_e32 v0, 0x3ff, v31
 ; GFX11-NEXT:    s_load_b32 s25, s[18:19], 0x24
 ; GFX11-NEXT:    s_mov_b32 s17, s15
 ; GFX11-NEXT:    s_mov_b32 s12, s13
 ; GFX11-NEXT:    s_mov_b64 s[10:11], s[6:7]
+; GFX11-NEXT:    v_and_b32_e32 v0, 0x3ff, v31
 ; GFX11-NEXT:    s_mov_b64 s[6:7], s[2:3]
 ; GFX11-NEXT:    s_mov_b64 s[4:5], s[0:1]
 ; GFX11-NEXT:    s_mov_b32 s20, 0

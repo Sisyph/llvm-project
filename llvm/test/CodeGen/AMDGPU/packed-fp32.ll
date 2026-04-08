@@ -3150,8 +3150,9 @@ define amdgpu_kernel void @add_vector_neg_bitcast_scalar_lo(ptr addrspace(1) %ou
 ; GFX1250-GISEL-NEXT:    ds_load_2addr_b32 v[0:1], v0 offset1:1
 ; GFX1250-GISEL-NEXT:    ds_load_b32 v2, v2
 ; GFX1250-GISEL-NEXT:    s_wait_dscnt 0x0
-; GFX1250-GISEL-NEXT:    v_dual_mov_b32 v3, v2 :: v_dual_max_num_f32 v2, -v2, -v2
-; GFX1250-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1)
+; GFX1250-GISEL-NEXT:    v_max_num_f32_e64 v2, -v2, -v2
+; GFX1250-GISEL-NEXT:    s_delay_alu instid0(VALU_DEP_1) | instskip(NEXT) | instid1(VALU_DEP_1)
+; GFX1250-GISEL-NEXT:    v_mov_b32_e32 v3, v2
 ; GFX1250-GISEL-NEXT:    v_pk_add_f32 v[0:1], v[0:1], v[2:3]
 ; GFX1250-GISEL-NEXT:    v_mov_b32_e32 v2, 0
 ; GFX1250-GISEL-NEXT:    global_store_b64 v2, v[0:1], s[0:1]

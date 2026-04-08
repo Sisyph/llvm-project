@@ -178,9 +178,9 @@ public:
           // won't work. Before GFX12 this is disallowed as well.
 
           if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X) {
-            bool IsAntiDep = dataDependency(SecondMI, *FirstMI);
+            bool IsAntiDep = dataDependency(*SecondMI, *FirstMI);
             bool AllowSameVGPR = VOPD3 & !IsAntiDep;
-            if (IsAntiDep && !isAntidependencyAllowed(SecondMI))
+            if (IsAntiDep && !isAntidependencyAllowed(*SecondMI))
               return false;
             if (checkVOPDRegConstraints(*SII, *SecondMI, *FirstMI, VOPD3, AllowSameVGPR)) {
               CI = VOPDCombineInfo(SecondMI, FirstMI, VOPD3);

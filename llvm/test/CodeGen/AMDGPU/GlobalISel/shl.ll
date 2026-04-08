@@ -1714,9 +1714,9 @@ define i65 @v_shl_i65_33(i65 %value) {
 ; GFX11-LABEL: v_shl_i65_33:
 ; GFX11:       ; %bb.0:
 ; GFX11-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-NEXT:    v_lshlrev_b32_e32 v4, 1, v0
 ; GFX11-NEXT:    v_lshrrev_b64 v[2:3], 31, v[0:1]
-; GFX11-NEXT:    v_dual_mov_b32 v1, v4 :: v_dual_lshlrev_b32 v4, 1, v0
-; GFX11-NEXT:    v_mov_b32_e32 v0, 0
+; GFX11-NEXT:    v_dual_mov_b32 v0, 0 :: v_dual_mov_b32 v1, v4
 ; GFX11-NEXT:    s_setpc_b64 s[30:31]
   %result = shl i65 %value, 33
   ret i65 %result
