@@ -34,6 +34,30 @@ using namespace llvm;
 
 #define DEBUG_TYPE "gcn-vopd-utils"
 
+static bool isMulticycleOp(const MachineInstr &MI, const GCNSubtarget &ST) {
+  unsigned Opc = MI.getOpcode();
+  return AMDGPU::isDPMACCInstruction(Opc);
+}
+
+bool dataDependency(const MachineInstr &FirstMI, const MachineInstr &SecondMI) {
+  const GCNSubtarget &ST = FirstMI.getMF()->getSubtarget<GCNSubtarget>();
+  const SIRegisterInfo *TRI = dyn_cast<SIRegisterInfo>(ST.getRegisterInfo());
+  for (const auto &Use : SecondMI.uses()) {
+    if (Use.isReg() && FirstMI.modifiesRegister(Use.getReg(), TRI))
+      return true;
+  }
+  return false;
+}
+
+bool isAntidependencyAllowed(const MachineInstr &OpX) {
+  const GCNSubtarget &ST = OpX.getMF()->getSubtarget<GCNSubtarget>();
+  if (AMDGPU::isNotGFX12Plus(ST))
+    return false;
+  if (isMulticycleOp(OpX, ST))
+    return false;
+  return true;
+}
+
 bool llvm::checkVOPDRegConstraints(const SIInstrInfo &TII,
                                    const MachineInstr &MIX,
                                    const MachineInstr &MIY, bool IsVOPD3, bool AllowSameVGPR) {
@@ -191,10 +215,6 @@ static bool shouldScheduleVOPDAdjacent(const TargetInstrInfo &TII,
     unsigned Opc = FirstMI->getOpcode();
     auto FirstCanBeVOPD = AMDGPU::getCanBeVOPD(Opc, EncodingFamily, VOPD3);
 
-    if (!((FirstCanBeVOPD.X && SecondCanBeVOPD.Y) ||
-          (FirstCanBeVOPD.Y && SecondCanBeVOPD.X)))
-      return false;
-
 #ifdef EXPENSIVE_CHECKS
     assert([&]() -> bool {
       for (auto MII = MachineBasicBlock::const_iterator(FirstMI);
@@ -206,7 +226,21 @@ static bool shouldScheduleVOPDAdjacent(const TargetInstrInfo &TII,
     }() && "Expected FirstMI to precede SecondMI");
 #endif
 
-    return checkVOPDRegConstraints(STII, *FirstMI, SecondMI, VOPD3, true);
+    if(dataDependency(*FirstMI, SecondMI))
+      return false;
+
+    if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y && checkVOPDRegConstraints(STII, *FirstMI, SecondMI, VOPD3, VOPD3))
+        return true;
+
+    if (FirstCanBeVOPD.Y && SecondCanBeVOPD.X) {
+      bool IsAntiDep = dataDependency(SecondMI, *FirstMI);
+      bool AllowSameVGPR = VOPD3 & !IsAntiDep;
+      if (IsAntiDep && !isAntidependencyAllowed(SecondMI))
+        return false;
+      return checkVOPDRegConstraints(STII, SecondMI, *FirstMI, VOPD3, AllowSameVGPR);
+    }
+
+    return false;
   };
 
   return checkVOPD(false) || (ST.hasVOPD3() && checkVOPD(true));
