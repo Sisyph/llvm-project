@@ -10757,6 +10757,7 @@ MachineInstr *SIInstrInfo::createPHISourceCopy(
 
 bool llvm::SIInstrInfo::isWave32() const { return ST.isWave32(); }
 
+/// If OpX is multicycle, anti-dependencies are not allowed.
 /// isDPMACCInstruction was not designed for VOPD, but it is fit for the
 /// purpose.
 bool llvm::SIInstrInfo::isVOPDAntidependencyAllowed(
