@@ -199,7 +199,7 @@ tryMatchVOPDPairVariant(const SIInstrInfo &TII, unsigned EncodingFamily,
   // AllowSameVGPR relaxes the VGPR bank overlap check for source operands.
   // Only enable it when there is no antidependency.
   const GCNSubtarget &ST = TII.getSubtarget();
-  bool AllowSameVGPR = ST.hasGFX1250Insts() && !IsAntiDep;
+  bool AllowSameVGPR = ST.hasGFX12Insts() && !IsAntiDep;
 
   if (FirstCanBeVOPD.X && SecondCanBeVOPD.Y) {
     if ((!IsAntiDep || TII.isVOPDAntidependencyAllowed(FirstMI)) &&
